@@ -1,3 +1,5 @@
+# Sekvenssikaavio
+```mermaid
 sequenceDiagram
     create participant laitehallinto
     main->>laitehallinto: HKLLaitehallinto()
@@ -28,3 +30,4 @@ sequenceDiagram
 
     main->>bussi244: osta_lippu(kallen_kortti, 2)
     bussi244-->>main: False
+```
