@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "chess_app"
+version = "0.1.0"
+description = ""
+authors = ["Juho Turunen <juho.turunen89@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+invoke = "^2.2.0"
+
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.7.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
