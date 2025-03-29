@@ -1,3 +1,5 @@
+# Monopoli
+```mermaid
 classDiagram
     Monopolipeli "1" -- "2" Noppa
     Monopolipeli "1" -- "1" Pelilauta
@@ -31,3 +33,4 @@ classDiagram
     class Pelaaja {
       int rahaa
     }
+```
