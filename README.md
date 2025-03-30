@@ -1,9 +1,9 @@
-# Ohjelmistotekniikka, harjoitustyö
+# Ohjelmistotekniikka course repository
 
 I'll make an _awesome_ and frankly **bold** piece of chess software for this course.
 
-[Laskarit](https://github.com/JuhoTurunen/ot-harjoitustyo/tree/main/laskarit)
+[Exercises](https://github.com/JuhoTurunen/ot-harjoitustyo/tree/main/laskarit)
 
-[Vaatimusmäärittely](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/chess_app/dokumentaatio/vaatimusmaarittely.md)
+[Requirements specification](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/chess_app/documentation/requirements_specification.md)
 
-[Tuntikirjanpito](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/chess_app/dokumentaatio/tuntikirjanpito.md)
+[Timesheet](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/chess_app/documentation/timesheet.md)
