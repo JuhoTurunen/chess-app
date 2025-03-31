@@ -4,7 +4,7 @@ from .move_validator import MoveValidator
 class GameService:
     def __init__(self, board):
         self.board = board
-        self.p1_turn = True
+        self.p1_turn = True if board.p1_color == "white" else False
         self.score = [0, 0]
         self.mv = MoveValidator()
 
