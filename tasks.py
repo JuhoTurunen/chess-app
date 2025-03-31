@@ -9,11 +9,11 @@ def start(ctx):
 
 @task
 def test(ctx):
-    ctx.run("pytest", pty=pty_option)
+    ctx.run("pytest src/", pty=pty_option)
 
 @task
 def coverage(ctx):
-    ctx.run("coverage run --branch -m pytest", pty=pty_option)
+    ctx.run("coverage run --branch -m pytest src/", pty=pty_option)
 
 @task(coverage)
 def coverage_report(ctx):
