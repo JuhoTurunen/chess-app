@@ -6,7 +6,7 @@ authors = ["Juho Turunen <juho.turunen89@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 invoke = "^2.2.0"
 pygame = "^2.6.1"
 numpy = "^2.2.4"
