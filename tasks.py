@@ -1,11 +1,11 @@
 from invoke import task
-from sys import platform
+from sys import platform, executable
 
 pty_option = False if platform == "win32" else True
 
 @task
 def start(ctx):
-    ctx.run("python src/main.py", pty=pty_option)
+    ctx.run(f"{executable} src/main.py", pty=pty_option)
 
 @task
 def test(ctx):

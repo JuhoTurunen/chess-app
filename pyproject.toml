@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "chess_app"
+name = "chess-app"
 version = "0.1.0"
 description = ""
 authors = ["Juho Turunen <juho.turunen89@gmail.com>"]
