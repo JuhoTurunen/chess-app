@@ -50,21 +50,13 @@ class Board:
         self.board_matrix[row][col] = piece
 
     def __repr__(self):
-        piece_symbols = {
-            "pawn": "P",
-            "rook": "R",
-            "knight": "N",
-            "bishop": "B",
-            "queen": "Q",
-            "king": "K",
-        }
         board_str = ""
         for row in self.board_matrix:
             row_str = ""
             for piece in row:
-                if piece is None:
+                if not piece:
                     row_str += "-- "
                 else:
-                    row_str += f"{piece.color[0]}{piece_symbols[piece.type]} "
-            board_str += row_str.rstrip() + "\n"
-        return board_str.rstrip()
+                    row_str += f"{piece} "
+            board_str += row_str + "\n"
+        return board_str
