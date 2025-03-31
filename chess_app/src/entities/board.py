@@ -3,9 +3,10 @@ import numpy as np
 
 
 class Board:
-    def __init__(self, playing_as):
+    def __init__(self, p1_color):
         self.board_matrix = np.full((8, 8), None, dtype=object)
-        self._setup_board(playing_as)
+        self.p1_color = p1_color
+        self._setup_board(p1_color)
 
     def _setup_board(self, own_color):
         enemy_color = "black"
