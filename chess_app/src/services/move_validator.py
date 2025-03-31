@@ -3,6 +3,8 @@ class MoveValidator:
         moved_piece = board.get_piece_at(start_pos)
         if not moved_piece:
             return False
+        if not (0 <= end_pos[0] <= 7 and 0 <= end_pos[1] <= 7):
+            return False
         
         match moved_piece.type:
             case "pawn":
@@ -23,17 +25,15 @@ class MoveValidator:
         ey, ex = end_pos
         print(y)
         print(ey)
-        if ey == y - 1 and y - 1 >= 0:
+        if ey == y - 1:
             # Forward
             if x == ex and not board.get_piece_at(end_pos):
                 return True
 
-            print("a1")
             # Diagonal
-            if (ex == x + 1 and x + 1 <= 7) or (ex == x - 1 and x - 1 >= 0):
+            if ex == x + 1 or ex == x - 1:
                 if board.get_piece_at(end_pos):
                     return True
                 return False
 
-        print("a2")
         return False
