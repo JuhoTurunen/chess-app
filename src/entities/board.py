@@ -42,11 +42,11 @@ class Board:
             self.board_matrix[1][i] = p(enemy_color, "pawn")
             self.board_matrix[6][i] = p(own_color, "pawn")
 
-    def get_piece_at(self, position):
+    def get_piece(self, position):
         row, col = position
         return self.board_matrix[row][col]
 
-    def set_piece_at(self, position, piece):
+    def set_piece(self, position, piece):
         row, col = position
         self.board_matrix[row][col] = piece
 

@@ -15,21 +15,23 @@ class GameService:
     def move_piece(self, start_pos, end_pos):
         board = copy.deepcopy(self.board)
 
-        eaten_piece = self.mv.is_valid_move(board, start_pos, end_pos)
+        eaten_piece_pos = self.mv.is_valid_move(board, start_pos, end_pos)
 
-        if eaten_piece == False:
+        if eaten_piece_pos == False:
             return False
 
-        moved_piece = board.get_piece_at(start_pos)
+        moved_piece = board.get_piece(start_pos)
 
-        if eaten_piece:
+        if eaten_piece_pos:
+            eaten_pece = board.get_piece(eaten_piece_pos)
+            board.set_piece(eaten_piece_pos, None)
             if self.p1_turn:
-                self.score[0] += eaten_piece.value
+                self.score[0] += eaten_pece.value
             else:
-                self.score[1] += eaten_piece.value
+                self.score[1] += eaten_pece.value
 
-        board.set_piece_at(end_pos, moved_piece)
-        board.set_piece_at(start_pos, None)
+        board.set_piece(end_pos, moved_piece)
+        board.set_piece(start_pos, None)
     
 
         if not self.p1_turn:

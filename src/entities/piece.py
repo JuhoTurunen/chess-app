@@ -5,7 +5,7 @@ class Piece:
         match type:
             case "pawn":
                 self.value = 1
-                self.can_jump = True
+                self.has_jumped = False
             case "rook":
                 self.value = 1
             case "knight":

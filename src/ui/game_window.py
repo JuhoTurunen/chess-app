@@ -65,7 +65,7 @@ class GameWindow:
                 rect = pygame.Rect(col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 pygame.draw.rect(self.screen, square_color, rect)
 
-                piece = self.board.get_piece_at((row, col))
+                piece = self.board.get_piece((row, col))
                 if piece:
                     piece_color = WHITE if square_color == BLACK else BLACK
                     text_surface = self.font.render(piece.__repr__(), True, piece_color)
