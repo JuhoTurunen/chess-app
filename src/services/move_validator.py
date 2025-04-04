@@ -15,7 +15,7 @@ class MoveValidator:
 
         match self.moved_piece.type:
             case "pawn":
-                return self._validate_pawn_move(board, start_pos, end_pos)
+                return self.validate_pawn_move(board, start_pos, end_pos)
             case "rook":
                 pass
             case "knight":
@@ -27,7 +27,7 @@ class MoveValidator:
             case "king":
                 pass
 
-    def _validate_pawn_move(self, board, start_pos, end_pos):
+    def validate_pawn_move(self, board, start_pos, end_pos):
         row, col = start_pos
         e_row, e_col = end_pos
         if e_row == row - 1:

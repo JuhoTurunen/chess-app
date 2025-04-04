@@ -1,3 +1,4 @@
+from entities.piece import Piece
 from .move_validator import MoveValidator
 import copy
 
@@ -29,6 +30,9 @@ class GameService:
                 self.score[0] += eaten_pece.value
             else:
                 self.score[1] += eaten_pece.value
+
+        if moved_piece.type == "pawn" and end_pos[0] == 0:
+            moved_piece = Piece(moved_piece.color, "queen")
 
         board.set_piece(end_pos, moved_piece)
         board.set_piece(start_pos, None)
