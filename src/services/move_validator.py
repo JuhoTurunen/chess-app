@@ -28,21 +28,21 @@ class MoveValidator:
                 pass
 
     def _validate_pawn_move(self, board, start_pos, end_pos):
-        y, x = start_pos
-        ey, ex = end_pos
-        if ey == y - 1:
+        row, col = start_pos
+        e_row, e_col = end_pos
+        if e_row == row - 1:
             # Forward
-            if x == ex and not self.eaten_piece:
+            if col == e_col and not self.eaten_piece:
                 self.moved_piece.can_jump = False
                 return None
 
             # Diagonal
-            if (ex == x + 1 or ex == x - 1) and self.eaten_piece:
+            if (e_col == col + 1 or e_col == col - 1) and self.eaten_piece:
                 self.moved_piece.can_jump = False
                 return self.eaten_piece
         
-        elif self.moved_piece.can_jump and ey == y - 2:
-            if x == ex and not board.get_piece_at((ex, ey + 1)) and not board.get_piece_at(end_pos):
+        elif self.moved_piece.can_jump and e_row == row - 2:
+            if col == e_col and not board.get_piece_at((e_col, e_row + 1)) and not board.get_piece_at(end_pos):
                 self.moved_piece.can_jump = False
                 return None
         

@@ -27,8 +27,8 @@ class TestGameService(unittest.TestCase):
         
         self.assertTrue(self.game_service.move_piece((4, 3), (3, 4)))
 
-        self.assertEqual(self.game_service.board.get_piece_at((4, 3)), None)
-        self.assertEqual(self.game_service.board.get_piece_at((3, 4)).__repr__(), "wP")
+        self.assertEqual(self.game_service.board.get_piece_at((3, 4)), None)
+        self.assertEqual(self.game_service.board.get_piece_at((4, 3)).__repr__(), "wP")
     
     def test_pawn_cant_diagonal_move(self):
         self.assertFalse(self.game_service.move_piece((6, 2), (5, 3)))
