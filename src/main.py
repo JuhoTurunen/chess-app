@@ -2,6 +2,7 @@ import os
 import sys
 from entities.board import Board
 from services.game_service import GameService
+from services.ai_engine import AiEngine
 from ui.game_window import GameWindow
 
 def main():
@@ -13,7 +14,8 @@ def main():
             os.environ["XDG_RUNTIME_DIR"] = dir
             
     board = Board("white")
-    game_service = GameService(board)
+    ai_engine = AiEngine(3)
+    game_service = GameService(board, ai_engine)
     game_window = GameWindow(game_service)
     game_window.run()
 

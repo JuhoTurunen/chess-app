@@ -6,12 +6,12 @@ class Piece:
             case "pawn":
                 self.value = 1
                 self.has_jumped = False
-            case "rook":
-                self.value = 1
             case "knight":
                 self.value = 3
             case "bishop":
                 self.value = 3
+            case "rook":
+                self.value = 5
             case "queen":
                 self.value = 9
             case "king":

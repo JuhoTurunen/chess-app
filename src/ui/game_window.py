@@ -44,9 +44,7 @@ class GameWindow:
                     print(board_pos)
 
                     if len(self.clicks) == 2:
-                        start_pos, end_pos = self.clicks
-                        new_board = self.game_service.move_piece(start_pos, end_pos)
-                        print(new_board)
+                        new_board = self.game_service.move_handler(self.clicks)
                         if new_board:
                             self.board = new_board
                         self.clicks = []

@@ -49,6 +49,10 @@ class Board:
     def set_piece(self, position, piece):
         row, col = position
         self.board_matrix[row][col] = piece
+    
+    def flip_board(self):
+        self.board_matrix = self.board_matrix[::-1, ::-1]
+        self.player_color = "white" if self.player_color == "black" else "black"
 
     def __repr__(self):
         board_str = ""

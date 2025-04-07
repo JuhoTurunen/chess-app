@@ -53,7 +53,7 @@ class MoveValidator:
                 return (row, e_col)
 
         elif row == 6 and e_row == 4:
-            if col == e_col and not board.get_piece((e_col, e_row + 1)) and not self.eaten_piece:
+            if col == e_col and not board.get_piece((e_row + 1, e_col)) and not self.eaten_piece:
                 self.moved_piece.has_jumped = True
                 return None
 
