@@ -1,11 +1,14 @@
 # Timesheet
-### Week 2
-- 21.3.2025 - 0.5 h
-### Week 3
-- 29.3.2025 - 0.5 h
-- 30.3.2025 - 2.5 h
-- 31.3.2025 - 4 h
-### Week 4
-- 4.4.2025 - 2 h
-- 5.4.2025 - 1 h
-- 7.4.2025 - 7 h
+
+| Day | Hours | Task  |
+| :----:|:-----| :-----|
+| 21.3. | 1 | Designing structure |
+| 29.3. | 1 | Designing structure |
+| 30.3. | 2 | Initial chess logic structure |
+| 31.3. | 3 | Support for pawns |
+|       | 1 | Testing and documentation |
+| 4.4.  | 2 | Basic GUI |
+| 5.4.  | 1 | Pawn special moves |
+| 7.4.  | 4 | AI (minimax) opponent |
+|       | 3 | Support for all piece types |
+| Total | 18 | | 
