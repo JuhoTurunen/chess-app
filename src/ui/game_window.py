@@ -38,6 +38,8 @@ class GameWindow:
                 pos = pygame.mouse.get_pos()
                 board_pos = self.get_board_square(pos)
                 if board_pos:
+                    if not self.clicks and not self.board.get_piece(board_pos):
+                        return
                     self.clicks.append(board_pos)
                     print(board_pos)
 
