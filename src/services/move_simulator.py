@@ -6,7 +6,7 @@ def simulate_move(board, move):
     start_pos, end_pos = move
 
     eaten_piece_pos = MoveValidator().is_valid_move(board, start_pos, end_pos)
-    if eaten_piece_pos == False:
+    if eaten_piece_pos is False:
         return False
 
     moved_piece = board.get_piece(start_pos)
@@ -30,5 +30,5 @@ def simulate_move(board, move):
 
     return False if king_checked(board) else board
 
-def king_checked(board):
+def king_checked(_):
     return False

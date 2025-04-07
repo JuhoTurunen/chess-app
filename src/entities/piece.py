@@ -18,6 +18,6 @@ class Piece:
             case "king":
                 self.value = 20
                 self.has_moved = False
-    
+
     def __repr__(self):
         return self.color[0] + self.type[0].capitalize()
