@@ -1,22 +1,34 @@
 from entities.piece import Piece
 from .move_validator import MoveValidator
 
+
 def simulate_move(board, move):
-        start_pos, end_pos = move
-        
-        eaten_piece_pos = MoveValidator().is_valid_move(board, start_pos, end_pos)
-        if eaten_piece_pos == False:
-            return False
+    start_pos, end_pos = move
 
-        moved_piece = board.get_piece(start_pos)
+    eaten_piece_pos = MoveValidator().is_valid_move(board, start_pos, end_pos)
+    if eaten_piece_pos == False:
+        return False
 
-        if eaten_piece_pos:
-            board.set_piece(eaten_piece_pos, None)
+    moved_piece = board.get_piece(start_pos)
 
-        if moved_piece.type == "pawn" and end_pos[0] == 0:
-            moved_piece = Piece(moved_piece.color, "queen")
+    if moved_piece.type == "king" and isinstance(eaten_piece_pos, str):
+        if eaten_piece_pos == "right_castle":
+            board.set_piece((7, 5), board.get_piece((7, 7)))
+            board.set_piece((7, 7), None)
+        elif eaten_piece_pos == "left_castle":
+            board.set_piece((7, 3), board.get_piece((7, 0)))
+            board.set_piece((7, 0), None)
 
-        board.set_piece(end_pos, moved_piece)
-        board.set_piece(start_pos, None)
+    elif eaten_piece_pos:
+        board.set_piece(eaten_piece_pos, None)
 
-        return board
+    if moved_piece.type == "pawn" and end_pos[0] == 0:
+        moved_piece = Piece(moved_piece.color, "queen")
+
+    board.set_piece(end_pos, moved_piece)
+    board.set_piece(start_pos, None)
+
+    return False if king_checked(board) else board
+
+def king_checked(board):
+    return False

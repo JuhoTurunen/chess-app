@@ -18,7 +18,8 @@ class GameService:
         
         if self.ai:
             ai_move = self.ai.get_best_move(copy.deepcopy(self.board))
-            self.move_piece(ai_move)
+            if not self.move_piece(ai_move):
+                print(f"AI move {ai_move} failed. \nBoard: \n{self.board}")
         
         return self.board
 

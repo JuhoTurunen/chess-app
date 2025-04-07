@@ -1,3 +1,4 @@
+import copy
 from .move_generator import generate_moves
 from .move_simulator import simulate_move
 from .board_evaluator import evaluate_board
@@ -13,23 +14,21 @@ class AiEngine:
             return None
 
         best_move = None
-        max_score = -float("inf")
-        alpha = -float("inf")
-        beta = float("inf")
+        best_score = -float("inf")
 
         for move in moves:
-            new_board = simulate_move(board, move)
+
+            new_board = simulate_move(copy.deepcopy(board), move)
             if not new_board:
                 continue
 
             new_board.flip_board()
-            score = -self.negamax(new_board, self.depth - 1, -beta, -alpha)
 
-            if score > max_score:
-                max_score = score
+            score = -self.negamax(new_board, self.depth - 1, -float("inf"), float("inf"))
+
+            if score > best_score:
+                best_score = score
                 best_move = move
-
-            alpha = max(alpha, score)
 
         return best_move
 
@@ -41,18 +40,18 @@ class AiEngine:
         if not moves:
             return evaluate_board(board)
 
-        max_eval = -float("inf")
         for move in moves:
-            new_board = simulate_move(board, move)
+            new_board = simulate_move(copy.deepcopy(board), move)
             if not new_board:
                 continue
 
             new_board.flip_board()
-            eval_score = -self.negamax(new_board, depth - 1, -beta, -alpha)
 
-            max_eval = max(max_eval, eval_score)
-            alpha = max(alpha, eval_score)
+            score = -self.negamax(new_board, depth - 1, -beta, -alpha)
+
+            alpha = max(alpha, score)
+
             if alpha >= beta:
                 break
 
-        return max_eval
+        return alpha

@@ -41,7 +41,6 @@ class GameWindow:
                     if not self.clicks and not self.board.get_piece(board_pos):
                         return
                     self.clicks.append(board_pos)
-                    print(board_pos)
 
                     if len(self.clicks) == 2:
                         new_board = self.game_service.move_handler(self.clicks)
