@@ -7,4 +7,6 @@
 - Added a temporary main file to simulate an example game with ASCII board printing
 ### Week 4
 - Added a basic GUI
-- Added logic for en passant
+- Added logic for en passant and pawn-to-queen promotion
+- Added minimax AI opponent
+- Added support for every other piece type
