@@ -1,10 +1,12 @@
+import copy
 from entities.piece import Piece
 from .move_validator import MoveValidator
 
 
 def simulate_move(board, move):
     start_pos, end_pos = move
-
+    board = copy.deepcopy(board)
+    
     if board.en_passant_target and board.en_passant_target[1]:
         board.en_passant_target = None
     elif board.en_passant_target:

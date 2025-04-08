@@ -9,6 +9,8 @@ class AiEngine:
         self.depth = depth
 
     def get_best_move(self, board):
+        board = copy.deepcopy(board)
+        
         moves = generate_moves(board)
         if not moves:
             return None
@@ -18,7 +20,7 @@ class AiEngine:
 
         for move in moves:
 
-            new_board = simulate_move(copy.deepcopy(board), move)
+            new_board = simulate_move(board, move)
             if not new_board:
                 continue
 
@@ -41,7 +43,7 @@ class AiEngine:
             return evaluate_board(board)
 
         for move in moves:
-            new_board = simulate_move(copy.deepcopy(board), move)
+            new_board = simulate_move(board, move)
             if not new_board:
                 continue
 

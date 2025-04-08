@@ -5,7 +5,7 @@ from entities.board import Board
 from services.game_service import GameService
 
 
-class TestGameService(unittest.TestCase):
+class TestPawn(unittest.TestCase):
     def setUp(self):
         self.board = Board("white")
         self.game_service = GameService(self.board)
