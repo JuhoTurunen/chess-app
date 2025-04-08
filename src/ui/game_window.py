@@ -108,19 +108,16 @@ class GameWindow:
                 # Highlight
                 if (row, col) in self.clicks:
                     square_highlight = WHITE_HIGHLIGHT if (row + col) % 2 == 0 else DARK_HIGHLIGHT
-                    rect = pygame.Rect(
-                        BOARD_OFFSET_X + col * SQUARE_SIZE,
-                        BOARD_OFFSET_Y + row * SQUARE_SIZE,
-                        SQUARE_SIZE,
-                        SQUARE_SIZE,
-                    )
                     pygame.draw.rect(self.screen, square_highlight, rect)
 
                 piece = self.board.get_piece((row, col))
                 if piece:
-                    text_surface = self.font.render(piece.__repr__(), True, BLACK)
-                    text_rect = text_surface.get_rect(center=rect.center)
-                    self.screen.blit(text_surface, text_rect)
+                    image_path = f"assets/pieces/{piece.color}_{piece.type}.png"
+                    piece_image = pygame.image.load(image_path).convert_alpha()
+                    image_rect = piece_image.get_rect(center=rect.center)
+                    if piece.type == "pawn" or piece.type == "knight":
+                        image_rect.x -= 1
+                    self.screen.blit(piece_image, image_rect)
 
         # Menu button
         pygame.draw.rect(self.screen, BUTTON_COLOR, self.menu_button, border_radius=5)
