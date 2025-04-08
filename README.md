@@ -1,7 +1,6 @@
 # Chess App
 
-This application works as a chess engine. Using it, you can play against a friend on a same computer, or against an AI opponent with varying difficulties.
-The game keeps score of your games against the AI opponent.
+This application works as a chess engine. Using it, you can play chess against a friend on the same computer or against an AI opponent with varying difficulties. The game keeps score of your wins and losses against the AI opponent.
 
 ## Documentation
 [Requirements specification](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/requirements_specification.md)
@@ -27,7 +26,7 @@ git clone https://github.com/JuhoTurunen/chess-app.git
 poetry install
 ```
 
-3. Start app with:
+3. Start the app with:
 
 ```bash
 poetry run invoke start
