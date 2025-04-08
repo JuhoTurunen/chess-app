@@ -11,4 +11,5 @@
 | 5.4.  | 1 | Pawn special moves |
 | 7.4.  | 4 | AI (minimax) opponent |
 |       | 3 | Support for all piece types |
-| Total | 18 | | 
+| 8.4.  | 7 | UI updates |
+| Total | 25 | | 
