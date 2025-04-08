@@ -15,22 +15,27 @@ def main():
                 os.makedirs(directory)
             os.environ["XDG_RUNTIME_DIR"] = directory
 
-    menu = MainMenu()
-    config = menu.run()
+    running = True
+    while running:
+        menu = MainMenu()
+        config = menu.run()
 
-    if config is None:
-        sys.exit()
+        if config is None:
+            sys.exit()
 
-    if config["mode"] == "pvp":
-        ai_engine = None
-        board = Board("white")
-    else:
-        board = Board(config["player_color"])
-        ai_engine = AiEngine(config["ai_depth"])
+        if config["mode"] == "pvp":
+            ai_engine = None
+            board = Board("white")
+        else:
+            board = Board(config["player_color"])
+            ai_engine = AiEngine(config["ai_depth"])
 
-    game_service = GameService(board, ai_engine)
-    game_window = GameWindow(game_service)
-    game_window.run()
+        game_service = GameService(board, ai_engine)
+        game_window = GameWindow(game_service)
+
+        continue_running = game_window.run()
+        if not continue_running:
+            running = False
 
 
 if __name__ == "__main__":
