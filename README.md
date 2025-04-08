@@ -32,3 +32,29 @@ poetry install
 ```bash
 poetry run invoke start
 ```
+
+## Commands
+
+You can start the chess app with:
+
+```bash
+poetry run invoke start
+```
+
+You can run tests with:
+
+```bash
+poetry run invoke test
+```
+
+You can generate a test coverage report (found in htmlcov/index.html) with:
+
+```bash
+poetry run invoke coverage-report
+```
+
+You can get a pylint command line report with:
+
+```bash
+poetry run invoke lint
+```
