@@ -5,7 +5,6 @@ class Piece:
         match type:
             case "pawn":
                 self.value = 1
-                self.has_jumped = False
             case "knight":
                 self.value = 3
             case "bishop":

@@ -6,6 +6,7 @@ class Board:
     def __init__(self, p1_color):
         self.board_matrix = np.full((8, 8), None, dtype=object)
         self.player_color = p1_color
+        self.en_passant_target = None
         self._setup_board(p1_color)
 
     def _setup_board(self, own_color):

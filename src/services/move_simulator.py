@@ -5,6 +5,11 @@ from .move_validator import MoveValidator
 def simulate_move(board, move):
     start_pos, end_pos = move
 
+    if board.en_passant_target and board.en_passant_target[1]:
+        board.en_passant_target = None
+    elif board.en_passant_target:
+        board.en_passant_target[1] = True
+
     eaten_piece_pos = MoveValidator().is_valid_move(board, start_pos, end_pos)
     if eaten_piece_pos is False:
         return False
@@ -28,7 +33,4 @@ def simulate_move(board, move):
     board.set_piece(end_pos, moved_piece)
     board.set_piece(start_pos, None)
 
-    return False if king_checked(board) else board
-
-def king_checked(_):
-    return False
+    return board

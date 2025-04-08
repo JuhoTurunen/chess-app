@@ -45,20 +45,14 @@ class MoveValidator:
                     return end_pos
 
                 # En passant
-                if row == 3:
-                    en_passant_p = board.get_piece((row, e_col))
-                    if not en_passant_p or en_passant_p.type != "pawn":
-                        return False
-
-                    if not en_passant_p.has_jumped or self.moved_piece.color == en_passant_p.color:
-                        return False
-
+                if board.en_passant_target and board.en_passant_target[0] == (e_row, e_col):
                     return (row, e_col)
 
         # Double forward
         elif row == 6 and e_row == 4 and col_diff == 0:
-            if not board.get_piece((e_row + 1, e_col)) and not self.eaten_piece:
-                self.moved_piece.has_jumped = True
+            first_step_row = e_row + 1
+            if not board.get_piece((first_step_row, e_col)) and not self.eaten_piece:
+                board.en_passant_target = [(7 - first_step_row, 7 - e_col), False]
                 return None
 
         return False
