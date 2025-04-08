@@ -10,34 +10,17 @@ class Board:
         self._setup_board(p1_color)
 
     def _setup_board(self, own_color):
-        enemy_color = "black"
-        if own_color == "black":
-            enemy_color = "white"
-
-        self.board_matrix[0][0] = p(enemy_color, "rook")
-        self.board_matrix[0][7] = p(enemy_color, "rook")
-        self.board_matrix[0][1] = p(enemy_color, "knight")
-        self.board_matrix[0][6] = p(enemy_color, "knight")
-        self.board_matrix[0][2] = p(enemy_color, "bishop")
-        self.board_matrix[0][5] = p(enemy_color, "bishop")
-
-        self.board_matrix[7][0] = p(own_color, "rook")
-        self.board_matrix[7][7] = p(own_color, "rook")
-        self.board_matrix[7][1] = p(own_color, "knight")
-        self.board_matrix[7][6] = p(own_color, "knight")
-        self.board_matrix[7][2] = p(own_color, "bishop")
-        self.board_matrix[7][5] = p(own_color, "bishop")
+        enemy_color = "white" if own_color == "black" else "black"
 
         if enemy_color == "black":
-            self.board_matrix[0][3] = p(enemy_color, "queen")
-            self.board_matrix[0][4] = p(enemy_color, "king")
-            self.board_matrix[7][3] = p(own_color, "queen")
-            self.board_matrix[7][4] = p(own_color, "king")
+            enemy_pieces = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"]
+            own_pieces = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"]
         else:
-            self.board_matrix[0][3] = p(enemy_color, "king")
-            self.board_matrix[0][4] = p(enemy_color, "queen")
-            self.board_matrix[7][3] = p(own_color, "king")
-            self.board_matrix[7][4] = p(own_color, "queen")
+            enemy_pieces = ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
+            own_pieces = ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
+
+        self.board_matrix[0] = [p(enemy_color, piece) for piece in enemy_pieces]
+        self.board_matrix[7] = [p(own_color, piece) for piece in own_pieces]
 
         for i in range(8):
             self.board_matrix[1][i] = p(enemy_color, "pawn")

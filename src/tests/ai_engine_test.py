@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import unittest
 from entities.board import Board
 from services.move_simulator import simulate_move

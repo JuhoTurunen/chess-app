@@ -1,3 +1,4 @@
+# pylint: skip-file
 import pygame
 
 WIDTH, HEIGHT = 640, 640

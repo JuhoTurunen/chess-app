@@ -10,7 +10,7 @@ class AiEngine:
 
     def get_best_move(self, board):
         board = copy.deepcopy(board)
-        
+
         moves = generate_moves(board)
         if not moves:
             return None
