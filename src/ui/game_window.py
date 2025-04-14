@@ -125,4 +125,42 @@ class GameWindow:
         menu_rect = menu_text.get_rect(center=self.menu_button.center)
         self.screen.blit(menu_text, menu_rect)
 
+        game_state = self.game_service.get_game_state()
+
+        if game_state["game_over"]:
+            # Background dim
+            overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 120))
+            self.screen.blit(overlay, (0, 0))
+
+            # Popup box
+            message_box = pygame.Rect(WIDTH // 4, HEIGHT // 3, WIDTH // 2, HEIGHT // 4)
+            pygame.draw.rect(self.screen, WHITE, message_box, border_radius=10)
+            pygame.draw.rect(self.screen, BLACK, message_box, width=2, border_radius=10)
+
+            # Game over message 
+            winner = game_state["winner"]
+            message = ""
+            if self.game_service.ai:
+                message = "You won!" if winner == "player" else "You lost!"
+            else:
+                message = f"{winner.capitalize()} wins!"
+
+            text = pygame.font.SysFont("Arial", 48, bold=True).render(message, True, BLACK)
+            text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 48))
+            self.screen.blit(text, text_rect)
+
+            # Continue button
+            continue_button = pygame.Rect(WIDTH // 2 - 60, HEIGHT // 2, 120, 40)
+            pygame.draw.rect(self.screen, BUTTON_COLOR, continue_button, border_radius=5)
+            continue_text = self.font.render("Continue", True, BLACK)
+            continue_rect = continue_text.get_rect(center=continue_button.center)
+            self.screen.blit(continue_text, continue_rect)
+
+            if pygame.mouse.get_pressed()[0]:
+                pos = pygame.mouse.get_pos()
+                if continue_button.collidepoint(pos):
+                    self.return_to_menu = True
+                    self.running = False
+
         pygame.display.flip()
