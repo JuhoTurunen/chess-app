@@ -7,6 +7,7 @@ class Board:
         self.board_matrix = self._setup_board(player_color)
         self.player_color = player_color
         self.en_passant_target = None
+        self.stall_clock = 0
         self.king_positions = {"white": (7, 4), "black": (7, 3)}
 
     @staticmethod

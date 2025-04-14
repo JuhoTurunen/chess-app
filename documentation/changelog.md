@@ -10,3 +10,7 @@
 - Added logic for en passant and pawn-to-queen promotion
 - Added minimax AI opponent
 - Added support for every other piece type
+### Week 5
+- Added win and loss detection
+- Added detection for most draw types
+- Added GUI for game end states

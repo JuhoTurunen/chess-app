@@ -8,12 +8,7 @@ from ui.main_menu import MainMenu
 
 
 def main():
-    if sys.platform.startswith("linux"):
-        if not os.environ.get("XDG_RUNTIME_DIR"):
-            directory = f"/tmp/runtime-{os.getpid()}"
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            os.environ["XDG_RUNTIME_DIR"] = directory
+    platform_init()
 
     running = True
     while running:
@@ -36,6 +31,15 @@ def main():
         continue_running = game_window.run()
         if not continue_running:
             running = False
+
+
+def platform_init():
+    if sys.platform.startswith("linux"):
+        if not os.environ.get("XDG_RUNTIME_DIR"):
+            directory = f"/tmp/runtime-{os.getpid()}"
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            os.environ["XDG_RUNTIME_DIR"] = directory
 
 
 if __name__ == "__main__":

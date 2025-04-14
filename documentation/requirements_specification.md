@@ -8,7 +8,7 @@ Using the app, users can play chess against other players or in the future, an A
   - The AI will use a minimax algorithm and alpha-beta pruning. **(Done)**
 - The user can select to play as white or black. **(Done)**
 - The user can enter a game of chess with their chosen settings. **(Done)**
-- The game engine will recognize victory, loss, or draw, returning to the main menu in every case.
+- The game engine will recognize victory, loss, or draw, returning to the main menu in every case. **(Done)**
 - The user can end the game prematurely, returning to the main menu. **(Done)**
 
 ## Further development ideas

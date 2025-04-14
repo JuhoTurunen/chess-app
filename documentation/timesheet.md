@@ -11,5 +11,7 @@
 | 5.4.  | 1 | Pawn special moves |
 | 7.4.  | 4 | AI (minimax) opponent |
 |       | 3 | Support for all piece types |
-| 8.4.  | 7 | UI updates |
-| Total | 25 | | 
+| 8.4.  | 7 | GUI updates |
+| 14.4. | 3 | Added win, loss and most draw detections |
+|       | 2 | Added GUI for game end states |
+| Total | 30 | | 

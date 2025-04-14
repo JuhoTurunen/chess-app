@@ -14,8 +14,8 @@ def simulate_move(board, move):
         else:
             board.en_passant_target[1] = True
 
-    result = MoveValidator().is_valid_move(board, start_pos, end_pos)
-    match result:
+    validator_output = MoveValidator().is_valid_move(board, start_pos, end_pos)
+    match validator_output:
         case 0:
             # Illegal Move
             return False
@@ -32,9 +32,16 @@ def simulate_move(board, move):
             board.set_piece((7, 7), None)
 
     moved_piece = board.get_piece(start_pos)
+    eaten_piece = board.get_piece(end_pos)
 
-    if end_pos[0] == 0 and moved_piece.type == "pawn":
-        moved_piece = Piece(moved_piece.color, "queen")
+    if moved_piece.type == "pawn":
+        board.stall_clock = 0
+        if end_pos[0] == 0:
+            moved_piece = Piece(moved_piece.color, "queen")
+    elif eaten_piece:
+        board.stall_clock = 0
+    else:
+        board.stall_clock += 1
 
     board.set_piece(end_pos, moved_piece)
     board.set_piece(start_pos, None)
@@ -43,7 +50,6 @@ def simulate_move(board, move):
         board.king_positions[board.player_color] = end_pos
 
     if is_king_threatened(board):
-        board.king_positions[board.player_color] = start_pos
         return False
 
     return board

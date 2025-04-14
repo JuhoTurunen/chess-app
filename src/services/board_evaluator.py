@@ -14,8 +14,7 @@ def evaluate_board(board):
 
 # King check detection
 def is_king_threatened(board):
-    king_pos = board.king_positions[board.player_color]
-    k_row, k_col = king_pos
+    k_row, k_col = board.king_positions[board.player_color]
 
     opponent_color = "white" if board.player_color == "black" else "black"
 
@@ -32,7 +31,7 @@ def is_king_threatened(board):
     }
 
     for direction, piece_types in directions.items():
-        if check_direction(board, king_pos, direction, opponent_color, piece_types):
+        if check_direction(board, (k_row, k_col), direction, opponent_color, piece_types):
             return True
 
     # Knight threats
@@ -47,10 +46,9 @@ def is_king_threatened(board):
         (k_row + 2, k_col + 1),
     ]
 
-    for pos in knight_positions:
-        row, col = pos
+    for row, col in knight_positions:
         if is_in_bounds(row, col):
-            piece = board.get_piece(pos)
+            piece = board.get_piece((row, col))
             if piece and piece.color == opponent_color and piece.type == "knight":
                 return True
 
@@ -67,11 +65,15 @@ def is_king_threatened(board):
         for col_offset in [-1, 0, 1]:
             if row_offset == col_offset == 0:
                 continue
+
             row, col = k_row + row_offset, k_col + col_offset
-            if is_in_bounds(row, col):
-                piece = board.get_piece((row, col))
-                if piece and piece.type == "king":
-                    return True
+
+            if not is_in_bounds(row, col):
+                continue
+
+            piece = board.get_piece((row, col))
+            if piece and piece.type == "king":
+                return True
 
     return False
 

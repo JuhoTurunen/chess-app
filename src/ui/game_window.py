@@ -138,13 +138,18 @@ class GameWindow:
             pygame.draw.rect(self.screen, WHITE, message_box, border_radius=10)
             pygame.draw.rect(self.screen, BLACK, message_box, width=2, border_radius=10)
 
-            # Game over message 
+            # Game over message
             winner = game_state["winner"]
             message = ""
-            if self.game_service.ai:
-                message = "You won!" if winner == "player" else "You lost!"
-            else:
-                message = f"{winner.capitalize()} wins!"
+            match winner:
+                case "ai":
+                    message = "You lost!"
+                case "player":
+                    message = "You won!"
+                case "draw":
+                    message = "Draw!"
+                case _:
+                    message = f"{winner.capitalize()} wins!"
 
             text = pygame.font.SysFont("Arial", 48, bold=True).render(message, True, BLACK)
             text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 48))
