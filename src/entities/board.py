@@ -3,13 +3,15 @@ from .piece import Piece as p
 
 
 class Board:
-    def __init__(self, p1_color):
-        self.board_matrix = np.full((8, 8), None, dtype=object)
-        self.player_color = p1_color
+    def __init__(self, player_color):
+        self.board_matrix = self._setup_board(player_color)
+        self.player_color = player_color
         self.en_passant_target = None
-        self._setup_board(p1_color)
+        self.king_positions = {"white": (7, 4), "black": (7, 3)}
 
-    def _setup_board(self, own_color):
+    @staticmethod
+    def _setup_board(own_color):
+        board_matrix = np.full((8, 8), None, dtype=object)
         enemy_color = "white" if own_color == "black" else "black"
 
         if enemy_color == "black":
@@ -19,12 +21,14 @@ class Board:
             enemy_pieces = ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
             own_pieces = ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
 
-        self.board_matrix[0] = [p(enemy_color, piece) for piece in enemy_pieces]
-        self.board_matrix[7] = [p(own_color, piece) for piece in own_pieces]
+        board_matrix[0] = [p(enemy_color, piece) for piece in enemy_pieces]
+        board_matrix[7] = [p(own_color, piece) for piece in own_pieces]
 
         for i in range(8):
-            self.board_matrix[1][i] = p(enemy_color, "pawn")
-            self.board_matrix[6][i] = p(own_color, "pawn")
+            board_matrix[1][i] = p(enemy_color, "pawn")
+            board_matrix[6][i] = p(own_color, "pawn")
+
+        return board_matrix
 
     def get_piece(self, position):
         row, col = position

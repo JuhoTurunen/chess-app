@@ -94,7 +94,7 @@ def generate_king_moves(row, col):
 
     for row_direction in [-1, 0, 1]:
         for col_direction in [-1, 0, 1]:
-            if row_direction == 0 and col_direction == 0:
+            if row_direction == col_direction == 0:
                 continue
             new_row = row + row_direction
             new_col = col + col_direction
