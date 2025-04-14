@@ -38,10 +38,10 @@ def simulate_move(board, move):
 
     board.set_piece(end_pos, moved_piece)
     board.set_piece(start_pos, None)
-    
+
     if moved_piece.type == "king":
         board.king_positions[board.player_color] = end_pos
-    
+
     if is_king_threatened(board):
         board.king_positions[board.player_color] = start_pos
         return False
