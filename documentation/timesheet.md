@@ -14,4 +14,6 @@
 | 8.4.  | 7 | GUI updates |
 | 14.4. | 4 | Added win, loss and most draw detections |
 |       | 1 | Added GUI for game end states |
-| Total | 30 | | 
+| 15.4. | 2 | Improved code quality and testing |
+|       | 1 | Updated documentation |
+| Total | 33 | | 
