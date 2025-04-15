@@ -4,18 +4,18 @@ class Piece:
         self.rank = rank
         match rank:
             case "pawn":
-                self.value = 1
+                self.value = 100
             case "knight":
-                self.value = 3
+                self.value = 320
             case "bishop":
-                self.value = 3
+                self.value = 330
             case "rook":
-                self.value = 5
+                self.value = 510
                 self.has_moved = False
             case "queen":
-                self.value = 9
+                self.value = 975
             case "king":
-                self.value = 20
+                self.value = 0
                 self.has_moved = False
 
     def __repr__(self):
