@@ -1,8 +1,8 @@
 class Piece:
-    def __init__(self, color, type):
+    def __init__(self, color, rank):
         self.color = color
-        self.type = type
-        match type:
+        self.rank = rank
+        match rank:
             case "pawn":
                 self.value = 1
             case "knight":
@@ -19,7 +19,6 @@ class Piece:
                 self.has_moved = False
 
     def __repr__(self):
-        if self.type != "knight":
-            return self.color[0] + self.type[0].capitalize()
-        else:
-            return self.color[0] + "N"
+        if self.rank != "knight":
+            return self.color[0] + self.rank[0].capitalize()
+        return self.color[0] + "N"

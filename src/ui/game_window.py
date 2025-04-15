@@ -112,10 +112,10 @@ class GameWindow:
 
                 piece = self.board.get_piece((row, col))
                 if piece:
-                    image_path = f"assets/pieces/{piece.color}_{piece.type}.png"
+                    image_path = f"assets/pieces/{piece.color}_{piece.rank}.png"
                     piece_image = pygame.image.load(image_path).convert_alpha()
                     image_rect = piece_image.get_rect(center=rect.center)
-                    if piece.type == "pawn" or piece.type == "knight":
+                    if piece.rank == "pawn" or piece.rank == "knight":
                         image_rect.x -= 1
                     self.screen.blit(piece_image, image_rect)
 

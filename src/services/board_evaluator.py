@@ -49,7 +49,7 @@ def is_king_threatened(board):
     for row, col in knight_positions:
         if is_in_bounds(row, col):
             piece = board.get_piece((row, col))
-            if piece and piece.color == opponent_color and piece.type == "knight":
+            if piece and piece.color == opponent_color and piece.rank == "knight":
                 return True
 
     # Pawn threats
@@ -57,7 +57,7 @@ def is_king_threatened(board):
         row, col = k_row + row_direction, k_col + col_direction
         if is_in_bounds(row, col):
             piece = board.get_piece((row, col))
-            if piece and piece.color == opponent_color and piece.type == "pawn":
+            if piece and piece.color == opponent_color and piece.rank == "pawn":
                 return True
 
     # King threats
@@ -72,7 +72,7 @@ def is_king_threatened(board):
                 continue
 
             piece = board.get_piece((row, col))
-            if piece and piece.type == "king":
+            if piece and piece.rank == "king":
                 return True
 
     return False
@@ -88,7 +88,7 @@ def check_direction(board, start_pos, direction, opponent_color, attacking_types
             break
         piece = board.get_piece((row, col))
         if piece:
-            if piece.color == opponent_color and piece.type in attacking_types:
+            if piece.color == opponent_color and piece.rank in attacking_types:
                 return True
             break
     return False
