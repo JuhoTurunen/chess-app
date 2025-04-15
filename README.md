@@ -57,3 +57,5 @@ You can get a pylint command line report with:
 ```bash
 poetry run invoke lint
 ```
+
+[**Ylimääräinen koodikatselmointi**](https://github.com/imsyc75/ot-harjoitustyo/issues/1)
