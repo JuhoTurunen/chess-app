@@ -11,6 +11,8 @@ This application works as a chess engine. Using it, you can play chess against a
 
 [Architecture](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/architecture.md)
 
+[Latest release](https://github.com/JuhoTurunen/chess-app/releases/tag/week5)
+
 
 ## Installisation
 
