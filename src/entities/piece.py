@@ -19,4 +19,7 @@ class Piece:
                 self.has_moved = False
 
     def __repr__(self):
-        return self.color[0] + self.type[0].capitalize()
+        if self.type != "knight":
+            return self.color[0] + self.type[0].capitalize()
+        else:
+            return self.color[0] + "N"
