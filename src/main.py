@@ -25,7 +25,7 @@ def main():
             board = Board(config["player_color"])
             ai_engine = AiEngine(config["ai_depth"])
 
-        game_service = GameService(board, ai_engine)
+        game_service = GameService(board, ai_engine, config["user_id"])
         game_window = GameWindow(game_service)
 
         continue_running = game_window.run()

@@ -1,10 +1,11 @@
+from repositories.game_repository import GameRepository
 from .move_generator import generate_moves
 from .move_simulator import simulate_move
 from .board_evaluator import is_king_threatened
 
 
 class GameService:
-    def __init__(self, board, ai_engine=None):
+    def __init__(self, board, ai_engine=None, user_id=None):
         self.board = board
         self.ai = ai_engine
         self.winner = None
@@ -14,20 +15,17 @@ class GameService:
                 ai_move = self.ai.get_best_move(self.board)
                 self.move_piece(ai_move)
 
+        self.user_id = user_id
+        if self.user_id:
+            self.game_repo = GameRepository()
+
     def move_handler(self, move):
         if not self.move_piece(move):
             return False
 
         end_state = self.is_game_over()
-
         if end_state:
-            self.board.flip_board()
-            if end_state == 2:
-                self.winner = "draw"
-            elif self.ai:
-                self.winner = "player"
-            else:
-                self.winner = self.board.player_color
+            self.game_end_handler(end_state)
             return self.board
 
         if self.ai:
@@ -36,13 +34,34 @@ class GameService:
 
             end_state = self.is_game_over()
             if end_state:
-                self.winner = "ai" if end_state == 1 else "draw"
+                self.game_end_handler(end_state, True)
+                return self.board
 
         if self.board.stall_clock >= 50:
             self.board.flip_board()
             self.winner = "draw"
 
         return self.board
+
+    def game_end_handler(self, end_state, ai_turn=False):
+        result = None
+
+        if end_state == 1:
+            if ai_turn:
+                self.winner = "ai"
+                result = -1
+            else:
+                self.board.flip_board()
+                self.winner = "player" if self.ai else self.board.player_color
+                result = 1
+        else:
+            self.winner = "draw"
+            if not ai_turn:
+                self.board.flip_board()
+            result = 0
+
+        if self.user_id and self.ai:
+            self.game_repo.record_game(self.user_id, result, self.ai.depth)
 
     def move_piece(self, move):
         board = simulate_move(self.board, move)
