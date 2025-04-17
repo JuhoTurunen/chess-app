@@ -12,10 +12,9 @@ Using the app, users can play chess against other players or in the future, an A
 - The user can end the game prematurely, returning to the main menu. **(Done)**
 
 ## Further development ideas
-- User's wins and losses against the AI are stored on a scoreboard with separation based on AI difficulty and played color.
-- User can change settings such as color scheme. These settings are saved.
+- The app supports multiple users by username login on startup.
+- User's wins and losses against the AI are stored on a scoreboard with separation based on AI difficulty and played color. **(Done)**
+- User can change AI difficulty when entering a game. **(Done)**
 - The AI will use a database of the best starting moves to pick beginning moves.
-- User can change AI difficulty when entering a game. **(Partially done)**
-   - This will change the depth of the minimax algorithm. **(Done)**
-   - This will also affect whether the AI uses the database of best starting moves.
 - After a game ends, the user can export a list of all the moves taken in the game.
+- User can change settings such as color scheme. These settings are saved.

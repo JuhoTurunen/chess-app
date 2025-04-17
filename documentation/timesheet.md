@@ -16,4 +16,6 @@
 |       | 1 | Added GUI for game end states |
 | 15.4. | 2 | Improved code quality and testing |
 |       | 1 | Updated documentation |
-| Total | 33 | | 
+| 17.4. | 3 | Added game stat tracking using a database |
+|       | 1 | Added stat information to main menu GUI |
+| Total | 37 | | 
