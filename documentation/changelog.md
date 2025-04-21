@@ -15,5 +15,6 @@
 - Added detection for most draw types (excluding threefold repetition)
 - Added GUI for game end states
 ### Week 6
+- Added support for multiple users
 - Added game stat tracking using a database
 - Added stat information to main menu GUI

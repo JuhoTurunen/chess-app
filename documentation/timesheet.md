@@ -18,4 +18,5 @@
 |       | 1 | Updated documentation |
 | 17.4. | 3 | Added game stat tracking using a database |
 |       | 1 | Added stat information to main menu GUI |
-| Total | 37 | | 
+| 21.4. | 2 | Added support for multiple users |
+| Total | 39 | | 

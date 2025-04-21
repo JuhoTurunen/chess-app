@@ -12,7 +12,7 @@ Using the app, users can play chess against other players or in the future, an A
 - The user can end the game prematurely, returning to the main menu. **(Done)**
 
 ## Further development ideas
-- The app supports multiple users by username login on startup.
+- The app supports multiple users by username login on startup. **(Done)**
 - User's wins and losses against the AI are stored on a scoreboard with separation based on AI difficulty and played color. **(Done)**
 - User can change AI difficulty when entering a game. **(Done)**
 - The AI will use a database of the best starting moves to pick beginning moves.
