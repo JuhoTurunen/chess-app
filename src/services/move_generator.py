@@ -1,4 +1,12 @@
 def generate_moves(board):
+    """Generates all pseudo-valid moves for current player.
+
+    Args:
+        board: Board
+
+    Returns:
+        list of move tuples (start, end) where each item is (row, col)
+    """
     moves = []
     for row in range(8):
         for col in range(8):
@@ -6,21 +14,21 @@ def generate_moves(board):
             if piece is not None and piece.color == board.player_color:
                 match piece.rank:
                     case "pawn":
-                        moves.extend(generate_pawn_moves(row, col))
+                        moves.extend(_generate_pawn_moves(row, col))
                     case "knight":
-                        moves.extend(generate_knight_moves(row, col))
+                        moves.extend(_generate_knight_moves(row, col))
                     case "bishop":
-                        moves.extend(generate_bishop_moves(row, col))
+                        moves.extend(_generate_bishop_moves(row, col))
                     case "rook":
-                        moves.extend(generate_rook_moves(row, col))
+                        moves.extend(_generate_rook_moves(row, col))
                     case "queen":
-                        moves.extend(generate_queen_moves(row, col))
+                        moves.extend(_generate_queen_moves(row, col))
                     case "king":
-                        moves.extend(generate_king_moves(row, col))
+                        moves.extend(_generate_king_moves(row, col))
     return moves
 
 
-def generate_pawn_moves(row, col):
+def _generate_pawn_moves(row, col):
     pawn_moves = []
 
     new_row = row - 1
@@ -36,7 +44,7 @@ def generate_pawn_moves(row, col):
     return pawn_moves
 
 
-def generate_knight_moves(row, col):
+def _generate_knight_moves(row, col):
     knight_moves = []
 
     offsets = [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]
@@ -50,7 +58,7 @@ def generate_knight_moves(row, col):
     return knight_moves
 
 
-def generate_bishop_moves(row, col):
+def _generate_bishop_moves(row, col):
     bishop_moves = []
 
     directions = [(-1, -1), (-1, 1), (1, 1), (1, -1)]
@@ -67,7 +75,7 @@ def generate_bishop_moves(row, col):
     return bishop_moves
 
 
-def generate_rook_moves(row, col):
+def _generate_rook_moves(row, col):
     rook_moves = []
 
     directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
@@ -84,12 +92,12 @@ def generate_rook_moves(row, col):
     return rook_moves
 
 
-def generate_queen_moves(row, col):
-    queen_moves = generate_bishop_moves(row, col) + generate_rook_moves(row, col)
+def _generate_queen_moves(row, col):
+    queen_moves = _generate_bishop_moves(row, col) + _generate_rook_moves(row, col)
     return queen_moves
 
 
-def generate_king_moves(row, col):
+def _generate_king_moves(row, col):
     king_moves = []
 
     for row_direction in [-1, 0, 1]:

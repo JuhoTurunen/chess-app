@@ -1,5 +1,20 @@
 class Piece:
+    """Represents a chess piece.
+
+    Attributes:
+        color: str
+        rank: str
+        value: int
+        has_moved: bool (only for king and rook)
+    """
+
     def __init__(self, color, rank):
+        """Initializes piece with color and type.
+
+        Args:
+            color: str
+            rank: str
+        """
         self.color = color
         self.rank = rank
         match rank:

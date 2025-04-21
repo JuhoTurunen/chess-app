@@ -7,13 +7,34 @@ CASTLE_RIGHT = 5
 
 
 class MoveValidator:
+    """Validates a move based on board and piece rules.
+
+    Attributes:
+        board: Board object.
+        start_pos: tuple
+        end_pos: tuple
+        moved_piece: Piece object.
+        eaten_piece: Piece object or None
+    """
+
     def __init__(self, board, move):
+        """Initializes with board and move.
+
+        Args:
+            board: Board object.
+            move: (start, end) positions as (row, col) tuples.
+        """
         self.board = board
         self.start_pos, self.end_pos = move
         self.moved_piece = board.get_piece(self.start_pos)
         self.eaten_piece = board.get_piece(self.end_pos)
 
     def validate_move(self):
+        """Validates board move.
+
+        Returns:
+            int, where 0 is illegal, 1 is normal, and 2-5 are special moves.
+        """
         if not self.moved_piece:
             return ILLEGAL_MOVE
         if not (0 <= self.end_pos[0] <= 7 and 0 <= self.end_pos[1] <= 7):
@@ -25,27 +46,26 @@ class MoveValidator:
 
         match self.moved_piece.rank:
             case "pawn":
-                return self.validate_pawn_move()
+                return self._validate_pawn_move()
             case "knight":
-                return self.validate_knight_move()
+                return self._validate_knight_move()
             case "bishop":
-                return self.validate_bishop_move()
+                return self._validate_bishop_move()
             case "rook":
-                return self.validate_rook_move()
+                return self._validate_rook_move()
             case "queen":
-                return self.validate_queen_move()
+                return self._validate_queen_move()
             case "king":
-                return self.validate_king_move()
+                return self._validate_king_move()
 
-    def validate_pawn_move(self):
+    def _validate_pawn_move(self):
         row, col = self.start_pos
         e_row, e_col = self.end_pos
 
-        row_diff = row - e_row
         col_diff = abs(col - e_col)
 
         # Forward
-        if row_diff == 1:
+        if row - e_row == 1:
             if col_diff == 0 and not self.eaten_piece:
                 return NORMAL_MOVE
 
@@ -69,7 +89,7 @@ class MoveValidator:
 
         return ILLEGAL_MOVE
 
-    def validate_knight_move(self):
+    def _validate_knight_move(self):
         row, col = self.start_pos
         e_row, e_col = self.end_pos
 
@@ -81,7 +101,7 @@ class MoveValidator:
 
         return ILLEGAL_MOVE
 
-    def validate_bishop_move(self):
+    def _validate_bishop_move(self):
         row, col = self.start_pos
         e_row, e_col = self.end_pos
 
@@ -103,7 +123,7 @@ class MoveValidator:
 
         return NORMAL_MOVE
 
-    def validate_rook_move(self):
+    def _validate_rook_move(self):
         row, col = self.start_pos
         e_row, e_col = self.end_pos
 
@@ -124,15 +144,15 @@ class MoveValidator:
 
         return NORMAL_MOVE
 
-    def validate_queen_move(self):
-        rook_result = self.validate_rook_move()
+    def _validate_queen_move(self):
+        rook_result = self._validate_rook_move()
         if rook_result:
             return rook_result
 
-        bishop_result = self.validate_bishop_move()
+        bishop_result = self._validate_bishop_move()
         return bishop_result
 
-    def validate_king_move(self):
+    def _validate_king_move(self):
         row, col = self.start_pos
         e_row, e_col = self.end_pos
 

@@ -14,7 +14,23 @@ BORDER_COLOR = (200, 200, 200)
 
 
 class Button:
+    """Represents a clickable button in the UI.
+
+    Attributes:
+        label: The text on the button.
+        rect: Rectangle area for button placement.
+        data: Optional data associated with the button.
+    """
+
     def __init__(self, label, width, height, data=None):
+        """Initializes the button.
+
+        Args:
+            label: str
+            width: int
+            height: int
+            data: Optional
+        """
         self.label = label
         self.rect = pygame.Rect(0, 0, width, height)
         self.data = data
@@ -31,7 +47,34 @@ class Button:
 
 
 class MainMenu:
+    """Handles the main menu UI and user interaction.
+
+    Attributes:
+        user: User object or None.
+        username: str
+        game_repo: GameRepository instance.
+        stats: User stats or None.
+        username_error: str
+        screen: Pygame surface for rendering.
+        clock: Pygame clock for framerate control.
+        font: Font used for rendering most text.
+        running: bool
+        selected_difficulty: int
+        selected_color: str
+        ai_group_rect: Box for AI game settings and start.
+        start_ai_button: Button object.
+        difficulty_buttons: list of Button objects.
+        color_buttons: list of Button objects.
+        pvp_button: Button object.
+        selected_config: dict for selected game settings or None
+    """
+
     def __init__(self, user=None):
+        """Initializes the main menu.
+
+        Args:
+            user: Optional User object
+        """
         pygame.init()
 
         self.user = user
@@ -44,7 +87,6 @@ class MainMenu:
         pygame.display.set_caption("Chess Menu")
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("Arial", 20)
-        self.title_font = pygame.font.SysFont("Arial", 48, bold=True)
         self.running = True
 
         self.selected_difficulty = 2
@@ -82,6 +124,11 @@ class MainMenu:
         self.selected_config = None
 
     def run(self):
+        """Main event/rendering loop.
+
+        Returns:
+            dict for selected game settings or None
+        """
         while self.running:
             self.handle_events()
             self.render()
@@ -89,6 +136,7 @@ class MainMenu:
         return self.selected_config
 
     def handle_events(self):
+        """Processes user interactions."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -134,19 +182,25 @@ class MainMenu:
                         "mode": "pvp",
                         "player_color": "white",
                         "ai_depth": None,
-                        "user": None,
+                        "user": self.user,
                     }
                     self.running = False
 
-    def init_user(self, user):
+    def init_user(self, username):
+        """Initializes a new user.
+
+        Args:
+            username: str
+        """
         user_repo = UserRepository()
-        self.user = user_repo.get_user(user) or user_repo.create_user(user)
+        self.user = user_repo.get_user(username) or user_repo.create_user(username)
         self.stats = self.game_repo.get_stats(self.user.id)
 
     def render(self):
+        """Renders the main menu screen."""
         self.screen.fill(WHITE)
 
-        title = self.title_font.render("Chess App", True, BLACK)
+        title = pygame.font.SysFont("Arial", 48, bold=True).render("Chess App", True, BLACK)
         self.screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 80))
 
         if self.user:
@@ -171,6 +225,7 @@ class MainMenu:
         pygame.display.flip()
 
     def render_game_start(self):
+        """Renders the game start options for AI or PvP."""
         pygame.draw.rect(self.screen, GROUP_BG, self.ai_group_rect, border_radius=8)
         pygame.draw.rect(self.screen, BORDER_COLOR, self.ai_group_rect, width=2, border_radius=8)
 
@@ -202,11 +257,18 @@ class MainMenu:
         self.draw_stats(stats_y)
 
     def draw_stats(self, y_position):
+        """Draws the user's stats on the screen.
+
+        Args:
+            y_position: int
+        """
         stats_box = pygame.Rect(WIDTH // 2 - 225, y_position + 30, 450, 150)
         pygame.draw.rect(self.screen, GROUP_BG, stats_box, border_radius=8)
         pygame.draw.rect(self.screen, BORDER_COLOR, stats_box, width=2, border_radius=8)
 
-        stats_title = pygame.font.SysFont("Arial", 25).render(f"User {self.user.username} stats:", True, BLACK)
+        stats_title = pygame.font.SysFont("Arial", 25).render(
+            f"User {self.user.username} stats:", True, BLACK
+        )
         self.screen.blit(stats_title, (stats_box.left + 40, stats_box.top + 25))
 
         labels_map = {1: "Easy", 2: "Medium", 3: "Hard"}
@@ -226,4 +288,12 @@ class MainMenu:
             self.screen.blit(pct_surf, (diff_x + 50, stats_box.top + 100))
 
     def is_valid_username(self, name):
+        """Checks if the username is formed of letters or numbers and is 1-50 characters.
+
+        Args:
+            name: str
+
+        Returns:
+            bool
+        """
         return 0 < len(name) <= 50 and re.fullmatch(r"[A-Za-z0-9]+", name) is not None

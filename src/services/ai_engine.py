@@ -5,10 +5,29 @@ from .board_evaluator import evaluate_board, is_king_threatened
 
 
 class AiEngine:
+    """AI that selects best move using Negamax.
+
+    Attributes:
+        depth: int
+    """
+
     def __init__(self, depth):
+        """Initializes AI with search depth.
+
+        Args:
+            depth: int
+        """
         self.depth = depth
 
     def get_best_move(self, board):
+        """Finds best move for current player.
+
+        Args:
+            board: Board
+
+        Returns:
+            None or move tuple (start, end) where each item is (row, col)
+        """
         board = copy.deepcopy(board)
 
         moves = generate_moves(board)
@@ -26,7 +45,7 @@ class AiEngine:
 
             new_board.flip_board()
 
-            score = -self.negamax(new_board, self.depth - 1, -float("inf"), float("inf"))
+            score = -self._negamax(new_board, self.depth - 1, -float("inf"), float("inf"))
 
             if score > best_score:
                 best_score = score
@@ -34,7 +53,18 @@ class AiEngine:
 
         return best_move
 
-    def negamax(self, board, depth, alpha, beta):
+    def _negamax(self, board, depth, alpha, beta):
+        """Negamax with alpha-beta pruning.
+
+        Args:
+            board: Board
+            depth: int
+            alpha: float
+            beta: float
+
+        Returns:
+            int
+        """
         if depth == 0:
             return evaluate_board(board)
 
@@ -50,7 +80,7 @@ class AiEngine:
 
             new_board.flip_board()
 
-            score = -self.negamax(new_board, depth - 1, -beta, -alpha)
+            score = -self._negamax(new_board, depth - 1, -beta, -alpha)
 
             alpha = max(alpha, score)
             if alpha >= beta:

@@ -19,7 +19,26 @@ BG_COLOR = (220, 220, 220)
 
 
 class GameWindow:
+    """Handles the GUI for the chess game.
+
+    Attributes:
+        game_service: Instance handling the chess game logic and state.
+        board: game_service's board object.
+        running: Controls the main loop execution.
+        return_to_menu: Flag indicating if user wants to return to menu.
+        screen: Pygame surface for rendering.
+        clock: Pygame clock for framerate control.
+        font: Font used for rendering most text.
+        clicks: Stores board square selections (start and end positions).
+        menu_button: Rect for menu button detection.
+    """
+
     def __init__(self, game_service):
+        """Initializes the window, rendering, and game control settings.
+
+        Args:
+            game_service: GameService instance.
+        """
         self.game_service = game_service
         self.board = game_service.board
         self.running = True
@@ -35,6 +54,11 @@ class GameWindow:
         self.menu_button = pygame.Rect(10, 10, 70, 40)
 
     def run(self):
+        """Main event/rendering loop.
+
+        Returns:
+            True if exiting to menu, else False
+        """
         while self.running:
             self.handle_events()
             self.render()
@@ -44,6 +68,7 @@ class GameWindow:
         return False
 
     def handle_events(self):
+        """Processes user interactions."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -70,6 +95,14 @@ class GameWindow:
                         self.clicks = []
 
     def get_board_square(self, mouse_pos):
+        """Converts screen coordinates to board position.
+
+        Args:
+            mouse_pos: tuple mouse position in pixels.
+
+        Returns:
+            tuple (row, col) or None if out of bounds.
+        """
         x, y = mouse_pos
 
         if (
@@ -91,6 +124,7 @@ class GameWindow:
         return None
 
     def render(self):
+        """Renders the chess board, menu button, and end game overlay."""
         self.screen.fill(BG_COLOR)
 
         # Chess board
