@@ -84,7 +84,7 @@ class MainMenu:
 
         self.username_error = ""
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Chess Menu")
+        pygame.display.set_caption("Chess App")
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("Arial", 20)
         self.running = True

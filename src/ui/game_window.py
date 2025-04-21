@@ -46,7 +46,7 @@ class GameWindow:
 
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Chess")
+        pygame.display.set_caption("Chess App")
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("Arial", 24)
         self.clicks = []
