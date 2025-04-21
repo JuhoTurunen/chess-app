@@ -11,8 +11,9 @@ def main():
     platform_init()
 
     running = True
+    user = None
     while running:
-        menu = MainMenu()
+        menu = MainMenu(user)
         config = menu.run()
 
         if config is None:
@@ -24,8 +25,8 @@ def main():
         else:
             board = Board(config["player_color"])
             ai_engine = AiEngine(config["ai_depth"])
-
-        game_service = GameService(board, ai_engine, config["user_id"])
+        user = config["user"]
+        game_service = GameService(board, ai_engine, user)
         game_window = GameWindow(game_service)
 
         continue_running = game_window.run()

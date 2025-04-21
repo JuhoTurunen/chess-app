@@ -119,7 +119,6 @@ class GameWindow:
                         image_rect.x -= 1
                     self.screen.blit(piece_image, image_rect)
 
-        # Menu button
         pygame.draw.rect(self.screen, BUTTON_COLOR, self.menu_button, border_radius=5)
         menu_text = self.font.render("Menu", True, BLACK)
         menu_rect = menu_text.get_rect(center=self.menu_button.center)
@@ -128,17 +127,14 @@ class GameWindow:
         game_state = self.game_service.get_game_state()
 
         if game_state["game_over"]:
-            # Background dim
             overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 120))
             self.screen.blit(overlay, (0, 0))
 
-            # Popup box
             message_box = pygame.Rect(WIDTH // 4, HEIGHT // 3, WIDTH // 2, HEIGHT // 4)
             pygame.draw.rect(self.screen, WHITE, message_box, border_radius=10)
             pygame.draw.rect(self.screen, BLACK, message_box, width=2, border_radius=10)
 
-            # Game over message
             winner = game_state["winner"]
             message = ""
             match winner:
@@ -155,7 +151,6 @@ class GameWindow:
             text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 48))
             self.screen.blit(text, text_rect)
 
-            # Continue button
             continue_button = pygame.Rect(WIDTH // 2 - 60, HEIGHT // 2, 120, 40)
             pygame.draw.rect(self.screen, BUTTON_COLOR, continue_button, border_radius=5)
             continue_text = self.font.render("Continue", True, BLACK)

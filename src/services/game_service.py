@@ -5,7 +5,7 @@ from .board_evaluator import is_king_threatened
 
 
 class GameService:
-    def __init__(self, board, ai_engine=None, user_id=None):
+    def __init__(self, board, ai_engine=None, user=None):
         self.board = board
         self.ai = ai_engine
         self.winner = None
@@ -15,8 +15,8 @@ class GameService:
                 ai_move = self.ai.get_best_move(self.board)
                 self.move_piece(ai_move)
 
-        self.user_id = user_id
-        if self.user_id:
+        self.user = user
+        if self.user:
             self.game_repo = GameRepository()
 
     def move_handler(self, move):
@@ -60,8 +60,8 @@ class GameService:
                 self.board.flip_board()
             result = 0
 
-        if self.user_id and self.ai:
-            self.game_repo.record_game(self.user_id, result, self.ai.depth)
+        if self.user and self.ai:
+            self.game_repo.record_game(self.user.id, result, self.ai.depth)
 
     def move_piece(self, move):
         board = simulate_move(self.board, move)
