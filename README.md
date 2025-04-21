@@ -14,7 +14,7 @@ This application works as a chess engine. Using it, you can play chess against a
 [Latest release](https://github.com/JuhoTurunen/chess-app/releases/tag/week5)
 
 
-## Installisation
+## Installation
 
 1. Clone the project with:
 
