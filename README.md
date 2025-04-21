@@ -13,7 +13,7 @@ This application works as a chess engine. Using it, you can play chess against a
 
 [User manual](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/user_manual.md)
 
-[Latest release](https://github.com/JuhoTurunen/chess-app/releases/tag/week5)
+[Latest release](https://github.com/JuhoTurunen/chess-app/releases/tag/week6)
 
 
 ## Installation
