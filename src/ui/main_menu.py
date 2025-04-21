@@ -267,7 +267,7 @@ class MainMenu:
         pygame.draw.rect(self.screen, BORDER_COLOR, stats_box, width=2, border_radius=8)
 
         stats_title = pygame.font.SysFont("Arial", 25).render(
-            f"User {self.user.username} stats:", True, BLACK
+            f"Stats of {self.user.username}:", True, BLACK
         )
         self.screen.blit(stats_title, (stats_box.left + 40, stats_box.top + 25))
 
