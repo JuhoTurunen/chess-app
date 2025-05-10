@@ -35,28 +35,27 @@ class MoveValidator:
         Returns:
             int, where 0 is illegal, 1 is normal, and 2-5 are special moves.
         """
-        if not self.moved_piece:
-            return ILLEGAL_MOVE
-        if not (0 <= self.end_pos[0] <= 7 and 0 <= self.end_pos[1] <= 7):
-            return ILLEGAL_MOVE
-        if self.board.player_color != self.moved_piece.color:
-            return ILLEGAL_MOVE
-        if self.eaten_piece and self.board.player_color == self.eaten_piece.color:
+        illegal_conditions = [
+            not self.moved_piece,
+            not (0 <= self.end_pos[0] <= 7 and 0 <= self.end_pos[1] <= 7),
+            self.board.player_color != self.moved_piece.color,
+            self.eaten_piece and self.board.player_color == self.eaten_piece.color,
+        ]
+
+        if any(illegal_conditions):
             return ILLEGAL_MOVE
 
-        match self.moved_piece.rank:
-            case "pawn":
-                return self._validate_pawn_move()
-            case "knight":
-                return self._validate_knight_move()
-            case "bishop":
-                return self._validate_bishop_move()
-            case "rook":
-                return self._validate_rook_move()
-            case "queen":
-                return self._validate_queen_move()
-            case "king":
-                return self._validate_king_move()
+        rank_to_validator = {
+            "pawn": self._validate_pawn_move,
+            "knight": self._validate_knight_move,
+            "bishop": self._validate_bishop_move,
+            "rook": self._validate_rook_move,
+            "queen": self._validate_queen_move,
+            "king": self._validate_king_move,
+        }
+
+        validator = rank_to_validator.get(self.moved_piece.rank)
+        return validator() if validator else ILLEGAL_MOVE
 
     def _validate_pawn_move(self):
         row, col = self.start_pos

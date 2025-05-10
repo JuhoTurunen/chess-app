@@ -1,5 +1,5 @@
-from services.db import SessionLocal
-from entities.models import User
+from persistence.session import SessionLocal
+from persistence.models.user import User
 
 
 class UserRepository:

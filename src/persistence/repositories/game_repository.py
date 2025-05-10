@@ -1,5 +1,5 @@
-from services.db import SessionLocal
-from entities.models import Game
+from persistence.session import SessionLocal
+from persistence.models.game import Game
 
 
 class GameRepository:

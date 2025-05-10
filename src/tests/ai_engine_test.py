@@ -1,9 +1,9 @@
 # pylint: skip-file
 
 import unittest
-from entities.board import Board
-from services.move_simulator import simulate_move
-from services.ai_engine import AiEngine
+from engine.entities.board import Board
+from engine.services.move_simulator import simulate_move
+from engine.services.ai_engine import AiEngine
 
 
 class TestAiEngine(unittest.TestCase):

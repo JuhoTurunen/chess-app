@@ -1,8 +1,8 @@
 # pylint: skip-file
 
 import unittest
-from entities.board import Board
-from services.move_simulator import simulate_move
+from engine.entities.board import Board
+from engine.services.move_simulator import simulate_move
 
 
 class TestKingCheck(unittest.TestCase):

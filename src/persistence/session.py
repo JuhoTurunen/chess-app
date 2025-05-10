@@ -1,7 +1,7 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from entities.models import Base
+from .models import Base
 
 DB_PATH = os.getenv("SQLITE_PATH", os.path.join(os.getcwd(), "data", "chess.db"))
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)

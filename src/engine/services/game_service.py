@@ -1,7 +1,5 @@
-from repositories.game_repository import GameRepository
 from .move_generator import generate_moves
 from .move_simulator import simulate_move
-from .board_evaluator import is_king_threatened
 
 
 class GameService:
@@ -15,7 +13,7 @@ class GameService:
         game_repo: GameRepository instance if user is present.
     """
 
-    def __init__(self, board, ai_engine=None, user=None):
+    def __init__(self, board, ai_engine=None, user=None, game_repository=None):
         """Initializes GameService and calls the AI to do the first move, if it is white.
 
         Args:
@@ -33,8 +31,7 @@ class GameService:
                 self._move_piece(ai_move)
 
         self.user = user
-        if self.user:
-            self.game_repo = GameRepository()
+        self.game_repo = game_repository
 
     def move_handler(self, move):
         """Processes a player move and the corresponding AI response, if present.
@@ -136,6 +133,6 @@ class GameService:
                 continue
             return False
 
-        if is_king_threatened(self.board):
+        if self.board.is_in_check():
             return 1
         return 2

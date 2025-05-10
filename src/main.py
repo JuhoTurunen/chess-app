@@ -1,8 +1,10 @@
 import os
 import sys
-from entities.board import Board
-from services.game_service import GameService
-from services.ai_engine import AiEngine
+from persistence.repositories.game_repository import GameRepository
+from persistence.repositories.user_repository import UserRepository
+from engine.entities.board import Board
+from engine.services.game_service import GameService
+from engine.services.ai_engine import AiEngine
 from ui.game_window import GameWindow
 from ui.main_menu import MainMenu
 
@@ -13,7 +15,7 @@ def main():
     running = True
     user = None
     while running:
-        menu = MainMenu(user)
+        menu = MainMenu(user, UserRepository(), GameRepository())
         config = menu.run()
 
         if config is None:
@@ -26,7 +28,7 @@ def main():
             board = Board(config["player_color"])
             ai_engine = AiEngine(config["ai_depth"])
         user = config["user"]
-        game_service = GameService(board, ai_engine, user)
+        game_service = GameService(board, ai_engine, user, GameRepository())
         game_window = GameWindow(game_service)
 
         continue_running = game_window.run()

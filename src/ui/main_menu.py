@@ -1,8 +1,6 @@
 # pylint: skip-file
 import pygame
 import re
-from repositories.game_repository import GameRepository
-from repositories.user_repository import UserRepository
 
 WIDTH, HEIGHT = 800, 800
 WHITE = (245, 245, 245)
@@ -52,6 +50,7 @@ class MainMenu:
     Attributes:
         user: User object or None.
         username: str
+        user_repo: UserRepository instance.
         game_repo: GameRepository instance.
         stats: User stats or None.
         username_error: str
@@ -69,7 +68,7 @@ class MainMenu:
         selected_config: dict for selected game settings or None
     """
 
-    def __init__(self, user=None):
+    def __init__(self, user=None, user_repository=None, game_repository=None):
         """Initializes the main menu.
 
         Args:
@@ -79,7 +78,8 @@ class MainMenu:
 
         self.user = user
         self.username = ""
-        self.game_repo = GameRepository()
+        self.user_repo = user_repository
+        self.game_repo = game_repository
         self.stats = self.game_repo.get_stats(self.user.id) if user else None
 
         self.username_error = ""
@@ -192,8 +192,7 @@ class MainMenu:
         Args:
             username: str
         """
-        user_repo = UserRepository()
-        self.user = user_repo.get_user(username) or user_repo.create_user(username)
+        self.user = self.user_repo.get_user(username) or self.user_repo.create_user(username)
         self.stats = self.game_repo.get_stats(self.user.id)
 
     def render(self):

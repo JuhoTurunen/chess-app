@@ -1,7 +1,6 @@
 import copy
 from .move_generator import generate_moves
 from .move_simulator import simulate_move
-from .board_evaluator import evaluate_board, is_king_threatened
 
 
 class AiEngine:
@@ -66,7 +65,7 @@ class AiEngine:
             int
         """
         if depth == 0:
-            return evaluate_board(board)
+            return board.material_balance()
 
         moves = generate_moves(board)
 
@@ -87,6 +86,6 @@ class AiEngine:
                 break
 
         if no_moves:
-            return -float("inf") if is_king_threatened(board) else 0
+            return -float("inf") if board.is_in_check() else 0
 
         return alpha

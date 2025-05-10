@@ -1,8 +1,8 @@
 # pylint: skip-file
 
 import unittest
-from entities.board import Board
-from services.game_service import GameService
+from engine.entities.board import Board
+from engine.services.game_service import GameService
 
 
 class TestPawn(unittest.TestCase):
