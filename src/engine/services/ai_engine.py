@@ -1,6 +1,5 @@
 import copy
-from .move_generator import generate_moves
-from .move_simulator import simulate_move
+from .core import *
 
 
 class AiEngine:
@@ -81,6 +80,6 @@ class AiEngine:
                 break
 
         if no_moves:
-            return -float("inf") if board.is_in_check() else 0
+            return -float("inf") if is_in_check(board) else 0
 
         return alpha

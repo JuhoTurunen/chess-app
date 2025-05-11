@@ -65,7 +65,7 @@ class Board:
         return board_str
 
     def material_balance(self):
-        """Evaluates board material balance.
+        """Gets board material balance.
 
         Returns:
             int
@@ -80,99 +80,6 @@ class Board:
                 else:
                     total -= piece.value
         return total
-
-    def is_in_check(self):
-        """Checks if the current player's king is in check.
-
-        Returns:
-            bool
-        """
-        k_row, k_col = self.king_positions[self.player_color]
-
-        if self._attacked_by_sliders(k_row, k_col):
-            return True
-        if self._attacked_by_knight(k_row, k_col):
-            return True
-        if self._attacked_by_pawn(k_row, k_col):
-            return True
-        if self._attacked_by_king(k_row, k_col):
-            return True
-
-        return False
-
-    def _attacked_by_sliders(self, k_row, k_col):
-        """Checks if king is threatened by bishops, rooks, or queens."""
-        directions = {
-            (0, 1): ["rook", "queen"],
-            (0, -1): ["rook", "queen"],
-            (1, 0): ["rook", "queen"],
-            (-1, 0): ["rook", "queen"],
-            (1, 1): ["bishop", "queen"],
-            (1, -1): ["bishop", "queen"],
-            (-1, 1): ["bishop", "queen"],
-            (-1, -1): ["bishop", "queen"],
-        }
-
-        for (row_direction, col_direction), piece_types in directions.items():
-            row, col = k_row + row_direction, k_col + col_direction
-            while self._is_in_bounds(row, col):
-                piece = self.get_piece((row, col))
-                if not piece:
-                    row += row_direction
-                    col += col_direction
-                    continue
-                if piece.color != self.player_color and piece.rank in piece_types:
-                    return True
-                break
-        return False
-
-    def _attacked_by_knight(self, k_row, k_col):
-        knight_positions = [
-            (k_row - 2, k_col - 1),
-            (k_row - 2, k_col + 1),
-            (k_row - 1, k_col - 2),
-            (k_row - 1, k_col + 2),
-            (k_row + 1, k_col - 2),
-            (k_row + 1, k_col + 2),
-            (k_row + 2, k_col - 1),
-            (k_row + 2, k_col + 1),
-        ]
-
-        for row, col in knight_positions:
-            if self._is_in_bounds(row, col):
-                piece = self.get_piece((row, col))
-                if piece and piece.color != self.player_color and piece.rank == "knight":
-                    return True
-        return False
-
-    def _attacked_by_pawn(self, k_row, k_col):
-        for row_direction, col_direction in [(-1, -1), (-1, 1)]:
-            row, col = k_row + row_direction, k_col + col_direction
-            if self._is_in_bounds(row, col):
-                piece = self.get_piece((row, col))
-                if piece and piece.color != self.player_color and piece.rank == "pawn":
-                    return True
-        return False
-
-    def _attacked_by_king(self, k_row, k_col):
-        for row_offset in [-1, 0, 1]:
-            for col_offset in [-1, 0, 1]:
-                if row_offset == col_offset == 0:
-                    continue
-
-                row, col = k_row + row_offset, k_col + col_offset
-
-                if not self._is_in_bounds(row, col):
-                    continue
-
-                piece = self.get_piece((row, col))
-                if piece and piece.rank == "king":
-                    return True
-        return False
-
-    @staticmethod
-    def _is_in_bounds(row, col):
-        return 0 <= row < 8 and 0 <= col < 8
 
     @staticmethod
     def _setup_board(player_color):

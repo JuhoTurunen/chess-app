@@ -2,7 +2,7 @@
 
 import unittest
 from engine.entities.board import Board
-from engine.services.move_simulator import simulate_move
+from engine.services.core.move_simulator import simulate_move
 
 
 class TestKingCheck(unittest.TestCase):

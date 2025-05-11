@@ -2,7 +2,7 @@ def generate_moves(board):
     """Generates all pseudo-valid moves for current player.
 
     Args:
-        board: Board
+        board: Board object
 
     Returns:
         list of move tuples (start, end) where each item is (row, col)

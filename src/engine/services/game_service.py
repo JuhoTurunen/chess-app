@@ -1,5 +1,4 @@
-from .move_generator import generate_moves
-from .move_simulator import simulate_move
+from .core import *
 
 CHECKMATE = 1
 DRAW = 2
@@ -109,6 +108,6 @@ class GameService:
                 continue
             return False
 
-        if self.board.is_in_check():
+        if is_in_check(self.board):
             return CHECKMATE
         return DRAW

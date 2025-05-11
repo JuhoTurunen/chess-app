@@ -1,6 +1,7 @@
 import copy
 from engine.entities.piece import Piece
 from .move_validator import MoveValidator
+from .check_detector import is_in_check
 
 
 def simulate_move(board, move):
@@ -41,7 +42,7 @@ def simulate_move(board, move):
     if moved_piece.rank == "king":
         board.king_positions[board.player_color] = end_pos
 
-    if board.is_in_check():
+    if is_in_check(board):
         return False
 
     return board
