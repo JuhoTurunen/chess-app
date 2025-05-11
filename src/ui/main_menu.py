@@ -45,28 +45,7 @@ class Button:
 
 
 class MainMenu:
-    """Handles the main menu UI and user interaction.
-
-    Attributes:
-        user: User object or None.
-        username: str
-        user_repo: UserRepository instance.
-        game_repo: GameRepository instance.
-        stats: User stats or None.
-        username_error: str
-        screen: Pygame surface for rendering.
-        clock: Pygame clock for framerate control.
-        font: Font used for rendering most text.
-        running: bool
-        selected_difficulty: int
-        selected_color: str
-        ai_group_rect: Box for AI game settings and start.
-        start_ai_button: Button object.
-        difficulty_buttons: list of Button objects.
-        color_buttons: list of Button objects.
-        pvp_button: Button object.
-        selected_config: dict for selected game settings or None
-    """
+    """Handles the main menu UI and user interaction."""
 
     def __init__(self, user=None, user_repository=None, game_repository=None):
         """Initializes the main menu.
@@ -74,54 +53,55 @@ class MainMenu:
         Args:
             user: Optional User object
         """
+
+        self._user = user
+        self._username = ""
+        self._user_repo = user_repository
+        self._game_repo = game_repository
+        self._stats = self._game_repo.get_stats(self._user.id) if user else None
+        self._running = True
+
+        self._selected_difficulty = 2
+        self._selected_color = "white"
+        self._selected_config = None
+
         pygame.init()
-
-        self.user = user
-        self.username = ""
-        self.user_repo = user_repository
-        self.game_repo = game_repository
-        self.stats = self.game_repo.get_stats(self.user.id) if user else None
-
-        self.username_error = ""
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Chess App")
-        self.clock = pygame.time.Clock()
-        self.font = pygame.font.SysFont("Arial", 20)
-        self.running = True
 
-        self.selected_difficulty = 2
-        self.selected_color = "white"
+        self._username_error = ""
+        self._screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self._clock = pygame.time.Clock()
+        self._font = pygame.font.SysFont("Arial", 20)
 
-        self.ai_group_rect = pygame.Rect(WIDTH // 2 - 180, 170, 360, 260)
+        self._ai_group_rect = pygame.Rect(WIDTH // 2 - 180, 170, 360, 260)
 
-        self.start_ai_button = Button("Start AI Game", 280, 50)
-        self.start_ai_button.rect.centerx = WIDTH // 2
-        self.start_ai_button.rect.y = self.ai_group_rect.y + 20
+        self._start_ai_button = Button("Start AI Game", 280, 50)
+        self._start_ai_button.rect.centerx = WIDTH // 2
+        self._start_ai_button.rect.y = self._ai_group_rect.y + 20
 
-        self.difficulty_buttons = [
+        self._pvp_button = Button("Player vs Player", 280, 50)
+        self._pvp_button.rect.centerx = WIDTH // 2
+        self._pvp_button.rect.y = self._ai_group_rect.bottom + 30
+
+        self._difficulty_buttons = [
             Button("Easy", 100, 40, data=1),
             Button("Medium", 100, 40, data=2),
             Button("Hard", 100, 40, data=3),
         ]
-        start_x = WIDTH // 2 - 155
-        for i, btn in enumerate(self.difficulty_buttons):
-            btn.rect.x = start_x + i * (btn.rect.width + 10)
-            btn.rect.y = self.start_ai_button.rect.bottom + 40
 
-        self.color_buttons = [
+        self._color_buttons = [
             Button("White", 150, 40, data="white"),
             Button("Black", 150, 40, data="black"),
         ]
+
         start_x = WIDTH // 2 - 155
-        for i, btn in enumerate(self.color_buttons):
+        for i, btn in enumerate(self._difficulty_buttons):
             btn.rect.x = start_x + i * (btn.rect.width + 10)
-            btn.rect.y = self.difficulty_buttons[0].rect.bottom + 40
+            btn.rect.y = self._start_ai_button.rect.bottom + 40
 
-        self.pvp_button = Button("Player vs Player", 280, 50)
-        self.pvp_button.rect.centerx = WIDTH // 2
-        self.pvp_button.rect.y = self.ai_group_rect.bottom + 30
-
-        self.selected_config = None
+        for i, btn in enumerate(self._color_buttons):
+            btn.rect.x = start_x + i * (btn.rect.width + 10)
+            btn.rect.y = self._difficulty_buttons[0].rect.bottom + 40
 
     def run(self):
         """Main event/rendering loop.
@@ -129,170 +109,149 @@ class MainMenu:
         Returns:
             dict for selected game settings or None
         """
-        while self.running:
-            self.handle_events()
-            self.render()
-            self.clock.tick(60)
-        return self.selected_config
+        while self._running:
+            self._handle_events()
+            self._render()
+            self._clock.tick(60)
+        return self._selected_config
 
-    def handle_events(self):
-        """Processes user interactions."""
+    def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running = False
+                self._running = False
 
-            if not self.user:
+            if not self._user:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
-                        self.username = self.username[:-1]
+                        self._username = self._username[:-1]
                     elif event.key == pygame.K_RETURN:
-                        if self.is_valid_username(self.username):
-                            self.init_user(self.username)
-                            self.username_error = ""
+                        if self._is_valid_username(self._username):
+                            self._init_user(self._username)
+                            self._username_error = ""
                         else:
-                            self.username_error = (
+                            self._username_error = (
                                 "Username must only use letters and numbers (1-50 characters)."
                             )
                     else:
-                        self.username += event.unicode
+                        self._username += event.unicode
                 continue
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
 
-                for button in self.difficulty_buttons:
+                for button in self._difficulty_buttons:
                     if button.is_clicked(pos):
-                        self.selected_difficulty = button.data
+                        self._selected_difficulty = button.data
 
-                for button in self.color_buttons:
+                for button in self._color_buttons:
                     if button.is_clicked(pos):
-                        self.selected_color = button.data
+                        self._selected_color = button.data
 
-                if self.start_ai_button.is_clicked(pos):
-                    self.selected_config = {
+                if self._start_ai_button.is_clicked(pos):
+                    self._selected_config = {
                         "mode": "ai",
-                        "player_color": self.selected_color,
-                        "ai_depth": self.selected_difficulty,
-                        "user": self.user,
+                        "player_color": self._selected_color,
+                        "ai_depth": self._selected_difficulty,
+                        "user": self._user,
                     }
-                    self.running = False
+                    self._running = False
 
-                if self.pvp_button.is_clicked(pos):
-                    self.selected_config = {
+                if self._pvp_button.is_clicked(pos):
+                    self._selected_config = {
                         "mode": "pvp",
                         "player_color": "white",
                         "ai_depth": None,
-                        "user": self.user,
+                        "user": self._user,
                     }
-                    self.running = False
+                    self._running = False
 
-    def init_user(self, username):
-        """Initializes a new user.
+    def _init_user(self, username):
+        self._user = self._user_repo.get_user(username) or self._user_repo.create_user(username)
+        self._stats = self._game_repo.get_stats(self._user.id)
 
-        Args:
-            username: str
-        """
-        self.user = self.user_repo.get_user(username) or self.user_repo.create_user(username)
-        self.stats = self.game_repo.get_stats(self.user.id)
+    def _is_valid_username(self, name):
+        return 0 < len(name) <= 50 and re.fullmatch(r"[A-Za-z0-9]+", name) is not None
 
-    def render(self):
-        """Renders the main menu screen."""
-        self.screen.fill(WHITE)
+    def _render(self):
+        self._screen.fill(WHITE)
 
         title = pygame.font.SysFont("Arial", 48, bold=True).render("Chess App", True, BLACK)
-        self.screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 80))
+        self._screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 80))
 
-        if self.user:
-            self.render_game_start()
+        if self._user:
+            self._render_game_start()
         else:
-            prompt = self.font.render("Enter username:", True, BLACK)
+            prompt = self._font.render("Enter username:", True, BLACK)
             prompt_rect = prompt.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 30))
-            self.screen.blit(prompt, prompt_rect)
+            self._screen.blit(prompt, prompt_rect)
 
             inp_box = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2, 300, 40)
-            pygame.draw.rect(self.screen, GROUP_BG, inp_box, border_radius=5)
-            pygame.draw.rect(self.screen, BORDER_COLOR, inp_box, width=2, border_radius=5)
+            pygame.draw.rect(self._screen, GROUP_BG, inp_box, border_radius=5)
+            pygame.draw.rect(self._screen, BORDER_COLOR, inp_box, width=2, border_radius=5)
 
-            text_surf = self.font.render(self.username, True, BLACK)
-            self.screen.blit(text_surf, (inp_box.x + 10, inp_box.y + 8))
+            text_surf = self._font.render(self._username, True, BLACK)
+            self._screen.blit(text_surf, (inp_box.x + 10, inp_box.y + 8))
 
-            if self.username_error:
-                err = self.font.render(self.username_error, True, (200, 50, 50))
+            if self._username_error:
+                err = self._font.render(self._username_error, True, (200, 50, 50))
                 err_rect = err.get_rect(center=(WIDTH // 2, inp_box.y + inp_box.height + 20))
-                self.screen.blit(err, err_rect)
+                self._screen.blit(err, err_rect)
 
         pygame.display.flip()
 
-    def render_game_start(self):
-        """Renders the game start options for AI or PvP."""
-        pygame.draw.rect(self.screen, GROUP_BG, self.ai_group_rect, border_radius=8)
-        pygame.draw.rect(self.screen, BORDER_COLOR, self.ai_group_rect, width=2, border_radius=8)
+    def _render_game_start(self):
+        pygame.draw.rect(self._screen, GROUP_BG, self._ai_group_rect, border_radius=8)
+        pygame.draw.rect(self._screen, BORDER_COLOR, self._ai_group_rect, width=2, border_radius=8)
 
-        self.start_ai_button.draw(self.screen, self.font)
+        self._start_ai_button.draw(self._screen, self._font)
 
-        diff_label = self.font.render("Select Difficulty:", True, BLACK)
+        diff_label = self._font.render("Select Difficulty:", True, BLACK)
         diff_label_pos = (
             WIDTH // 2 - diff_label.get_width() // 2,
-            self.start_ai_button.rect.bottom + 10,
+            self._start_ai_button.rect.bottom + 10,
         )
-        self.screen.blit(diff_label, diff_label_pos)
+        self._screen.blit(diff_label, diff_label_pos)
 
-        for button in self.difficulty_buttons:
-            button.draw(self.screen, self.font, button.data == self.selected_difficulty)
+        for button in self._difficulty_buttons:
+            button.draw(self._screen, self._font, button.data == self._selected_difficulty)
 
-        color_label = self.font.render("Select Color:", True, BLACK)
+        color_label = self._font.render("Select Color:", True, BLACK)
         color_label_pos = (
             WIDTH // 2 - color_label.get_width() // 2,
-            self.difficulty_buttons[0].rect.bottom + 10,
+            self._difficulty_buttons[0].rect.bottom + 10,
         )
-        self.screen.blit(color_label, color_label_pos)
+        self._screen.blit(color_label, color_label_pos)
 
-        for button in self.color_buttons:
-            button.draw(self.screen, self.font, button.data == self.selected_color)
+        for button in self._color_buttons:
+            button.draw(self._screen, self._font, button.data == self._selected_color)
 
-        self.pvp_button.draw(self.screen, self.font)
+        self._pvp_button.draw(self._screen, self._font)
 
-        stats_y = self.pvp_button.rect.bottom + 40
-        self.draw_stats(stats_y)
+        stats_y = self._pvp_button.rect.bottom + 40
+        self._draw_stats(stats_y)
 
-    def draw_stats(self, y_position):
-        """Draws the user's stats on the screen.
-
-        Args:
-            y_position: int
-        """
+    def _draw_stats(self, y_position):
         stats_box = pygame.Rect(WIDTH // 2 - 225, y_position + 30, 450, 150)
-        pygame.draw.rect(self.screen, GROUP_BG, stats_box, border_radius=8)
-        pygame.draw.rect(self.screen, BORDER_COLOR, stats_box, width=2, border_radius=8)
+        pygame.draw.rect(self._screen, GROUP_BG, stats_box, border_radius=8)
+        pygame.draw.rect(self._screen, BORDER_COLOR, stats_box, width=2, border_radius=8)
 
         stats_title = pygame.font.SysFont("Arial", 25).render(
-            f"Stats of {self.user.username}:", True, BLACK
+            f"Stats of {self._user.username}:", True, BLACK
         )
-        self.screen.blit(stats_title, (stats_box.left + 40, stats_box.top + 25))
+        self._screen.blit(stats_title, (stats_box.left + 40, stats_box.top + 25))
 
         labels_map = {1: "Easy", 2: "Medium", 3: "Hard"}
 
-        for i, (diff, st) in enumerate(self.stats.items()):
-            difficulty_label = self.font.render(labels_map.get(diff, diff), True, BLACK)
+        for i, (diff, st) in enumerate(self._stats.items()):
+            difficulty_label = self._font.render(labels_map.get(diff, diff), True, BLACK)
             diff_x = stats_box.left + 40 + i * 150
-            self.screen.blit(difficulty_label, (diff_x, stats_box.top + 70))
+            self._screen.blit(difficulty_label, (diff_x, stats_box.top + 70))
 
             stats = f"{st['wins']}-{st['draws']}-{st['losses']}"
-            record_surf = self.font.render(stats, True, BLACK)
-            self.screen.blit(record_surf, (diff_x, stats_box.top + 100))
+            record_surf = self._font.render(stats, True, BLACK)
+            self._screen.blit(record_surf, (diff_x, stats_box.top + 100))
 
             wl_ratio = int(st["win_pct"])
             color = (50, 200, 50) if wl_ratio >= 50 else (200, 50, 50)
-            pct_surf = self.font.render(f"{wl_ratio}%", True, color)
-            self.screen.blit(pct_surf, (diff_x + 50, stats_box.top + 100))
-
-    def is_valid_username(self, name):
-        """Checks if the username is formed of letters or numbers and is 1-50 characters.
-
-        Args:
-            name: str
-
-        Returns:
-            bool
-        """
-        return 0 < len(name) <= 50 and re.fullmatch(r"[A-Za-z0-9]+", name) is not None
+            pct_surf = self._font.render(f"{wl_ratio}%", True, color)
+            self._screen.blit(pct_surf, (diff_x + 50, stats_box.top + 100))
