@@ -3,17 +3,13 @@
 This application works as a chess engine. Using it, you can play chess against a friend on the same computer or against an AI opponent with varying difficulties. The game keeps score of your wins and losses against the AI opponent.
 
 ## Documentation
-[Requirements specification](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/requirements_specification.md)
-
-[Timesheet](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/timesheet.md)
-
-[Changelog](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/changelog.md)
-
-[Architecture](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/architecture.md)
-
-[User manual](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/user_manual.md)
-
-[Latest release](https://github.com/JuhoTurunen/chess-app/releases/tag/week6)
+- [Requirements specification](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/requirements_specification.md)
+- [Timesheet](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/timesheet.md)
+- [Changelog](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/changelog.md)
+- [Architecture](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/architecture.md)
+- [Testing](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/testing.md)
+- [User manual](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/user_manual.md)
+- [Latest release](https://github.com/JuhoTurunen/chess-app/releases/tag/week6)
 
 
 ## Installation
