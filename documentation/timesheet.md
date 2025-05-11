@@ -20,4 +20,7 @@
 |       | 1 | Added stat information to main menu GUI |
 | 21.4. | 2 | Added support for multiple users |
 |       | 2 | Updated documentation |
-| Total | 41 | | 
+| 10.5. | 2 | Improved code quality |
+| 11.5. | 3 | Improved code quality |
+|       | 3 | Updated documentation |
+| Total | 47 | | 
