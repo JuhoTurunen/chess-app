@@ -7,16 +7,17 @@ class AiEngine:
     """AI that selects best move using Negamax.
 
     Attributes:
-        depth: int
+        difficulty: int
     """
 
-    def __init__(self, depth):
+    def __init__(self, difficulty):
         """Initializes AI with search depth.
 
         Args:
-            depth: int
+            difficulty: int
         """
-        self.depth = depth
+        self.difficulty = difficulty
+        self._depth = difficulty
 
     def get_best_move(self, board):
         """Finds best move for current player.
@@ -44,7 +45,7 @@ class AiEngine:
 
             new_board.flip_board()
 
-            score = -self._negamax(new_board, self.depth - 1, -float("inf"), float("inf"))
+            score = -self._negamax(new_board, self._depth - 1, -float("inf"), float("inf"))
 
             if score > best_score:
                 best_score = score
@@ -55,14 +56,8 @@ class AiEngine:
     def _negamax(self, board, depth, alpha, beta):
         """Negamax with alpha-beta pruning.
 
-        Args:
-            board: Board
-            depth: int
-            alpha: float
-            beta: float
-
         Returns:
-            int
+            int for best achievable material balance from given board state
         """
         if depth == 0:
             return board.material_balance()

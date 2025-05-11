@@ -113,9 +113,8 @@ class GameWindow:
         menu_rect = menu_text.get_rect(center=self._menu_button.center)
         self._screen.blit(menu_text, menu_rect)
 
-        game_state = self._game_service.get_game_state()
-        if game_state["game_over"]:
-            self._render_game_over(game_state)
+        if winner := self._game_service.get_winner():
+            self._render_game_over(winner)
 
         pygame.display.flip()
 
@@ -145,7 +144,7 @@ class GameWindow:
                         image_rect.x -= 1
                     self._screen.blit(piece_image, image_rect)
 
-    def _render_game_over(self, game_state):
+    def _render_game_over(self, winner):
         overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 120))
         self._screen.blit(overlay, (0, 0))
@@ -154,7 +153,6 @@ class GameWindow:
         pygame.draw.rect(self._screen, WHITE, message_box, border_radius=10)
         pygame.draw.rect(self._screen, BLACK, message_box, width=2, border_radius=10)
 
-        winner = game_state["winner"]
         message = ""
         match winner:
             case "ai":
