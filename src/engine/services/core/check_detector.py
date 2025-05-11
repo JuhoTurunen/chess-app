@@ -2,10 +2,10 @@ def is_in_check(board):
     """Checks if the current player's king is in check.
 
     Args:
-        board: Board
+        board: Board object.
 
     Returns:
-        bool
+        Boolean for whether own king is in check.
     """
     k_row, k_col = board.king_positions[board.player_color]
 
@@ -94,8 +94,10 @@ def _attacked_by_king(board, k_row, k_col):
                 return True
     return False
 
+
 def _not_own_piece(board, piece):
     return piece and piece.color != board.player_color
+
 
 def _is_in_bounds(row, col):
     return 0 <= row < 8 and 0 <= col < 8

@@ -46,7 +46,7 @@ class GameWindow:
         """Main event/rendering loop.
 
         Returns:
-            True if returning to menu, else False, if closing program
+            True if returning to menu, else False, if closing program.
         """
         while self._running:
             self._handle_events()

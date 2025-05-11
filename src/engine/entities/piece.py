@@ -2,18 +2,18 @@ class Piece:
     """Represents a chess piece.
 
     Attributes:
-        color: str
-        rank: str
-        value: int
-        has_moved: bool (only for king and rook)
+        color: String for piece color.
+        rank: String for the type of the piece (e.g. "knight").
+        value: The integer value of the piece.
+        has_moved: Boolean for whether the piece has moved (only for king and rook).
     """
 
     def __init__(self, color, rank):
         """Initializes piece with color and type.
 
         Args:
-            color: str
-            rank: str
+            color: String for piece color.
+            rank: String for the type of the piece (e.g. "knight").
         """
         self.color = color
         self.rank = rank

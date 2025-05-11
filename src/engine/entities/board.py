@@ -6,33 +6,33 @@ class Board:
     """Represents the chess board and game state.
 
     Attributes:
-        board_matrix: 8x8 numpy matrix of Piece objects or None.
+        board_matrix: 8x8 matrix of Piece objects or None.
         player_color: Color whose perspective the board is oriented by.
-        en_passant_target: Optional tuple for en passant capture target.
         stall_clock: Number of moves without captures or pawn advances.
+        en_passant_target: Optional tuple for en passant capture target.
         king_positions: Positions of both kings from the corresponding color's perspective.
     """
 
-    def __init__(self, player_color):
+    def __init__(self, player_color: str):
         """Initializes board and piece positions.
 
         Args:
-            player_color: str
+            player_color: Color ("white" or "black") of the player.
         """
         self.board_matrix = self._setup_board(player_color)
         self.player_color = player_color
-        self.en_passant_target = None
         self.stall_clock = 0
+        self.en_passant_target = None
         self.king_positions = {"white": (7, 4), "black": (7, 3)}
 
     def get_piece(self, position):
         """Gets the piece at a position.
 
         Args:
-            position: tuple
+            position: (row, col) tuple for a board square.
 
         Returns:
-            Piece or None
+            Piece or None, if no piece at location.
         """
         row, col = position
         return self.board_matrix[row][col]
@@ -41,8 +41,8 @@ class Board:
         """Sets a piece at a position.
 
         Args:
-            position: tuple
-            piece: Piece or None
+            position: (row, col) tuple for a board square.
+            piece: Piece or None, if eaten piece's position is not replaced by another.
         """
         row, col = position
         self.board_matrix[row][col] = piece
@@ -68,7 +68,7 @@ class Board:
         """Gets board material balance.
 
         Returns:
-            int
+            Integer value of own pieces minus enemy pieces.
         """
         total = 0
         for row in self.board_matrix:
@@ -83,14 +83,6 @@ class Board:
 
     @staticmethod
     def _setup_board(player_color):
-        """Sets up pieces on the board.
-
-        Args:
-            player_color: str
-
-        Returns:
-            np.ndarray
-        """
         board_matrix = np.full((8, 8), None, dtype=object)
         enemy_color = "white" if player_color == "black" else "black"
 

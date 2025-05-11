@@ -49,16 +49,7 @@ def simulate_move(board, move):
 
 
 def _process_move(board, validator_output, move):
-    """Updates board state for a chess move based on validator output.
-
-    Args:
-        board: Board object.
-        validator_output: Integer code for move type.
-        move: (start, end) positions as (row, col) tuples.
-
-    Returns:
-        bool
-    """
+    """Updates board state for a chess move based on validator output code."""
     start_pos, end_pos = move
     match validator_output:
         case 0:
@@ -82,11 +73,7 @@ def _process_move(board, validator_output, move):
 
 
 def _handle_en_passant_targeting(board):
-    """Updates or clears en passant target on the board.
-
-    Args:
-        board: Board object.
-    """
+    """Updates or clears en passant target on the board."""
     if board.en_passant_target:
         if board.en_passant_target[1]:
             board.en_passant_target = None

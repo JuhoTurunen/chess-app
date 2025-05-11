@@ -7,15 +7,7 @@ CASTLE_RIGHT = 5
 
 
 class MoveValidator:
-    """Validates a move based on board and piece rules.
-
-    Attributes:
-        board: Board object.
-        start_pos: tuple
-        end_pos: tuple
-        moved_piece: Piece object.
-        eaten_piece: Piece object or None
-    """
+    """Validates a move based on board and piece rules."""
 
     def __init__(self, board, move):
         """Initializes with board and move.
@@ -24,21 +16,21 @@ class MoveValidator:
             board: Board object.
             move: (start, end) positions as (row, col) tuples.
         """
-        self.board = board
-        self.start_pos, self.end_pos = move
-        self.moved_piece = board.get_piece(self.start_pos)
-        self.eaten_piece = board.get_piece(self.end_pos)
+        self._board = board
+        self._start_pos, self.end_pos = move
+        self._moved_piece = board.get_piece(self._start_pos)
+        self._eaten_piece = board.get_piece(self.end_pos)
 
     def validate_move(self):
         """Validates board move.
 
         Returns:
-            int, where 0 is illegal, 1 is normal, and 2-5 are special moves.
+            Integer, where 0 is illegal, 1 is normal, and 2-5 are special moves.
         """
         illegal_conditions = [
-            not self.moved_piece or self.board.player_color != self.moved_piece.color,
+            not self._moved_piece or self._board.player_color != self._moved_piece.color,
             not (0 <= self.end_pos[0] <= 7 and 0 <= self.end_pos[1] <= 7),
-            self.eaten_piece and self.board.player_color == self.eaten_piece.color,
+            self._eaten_piece and self._board.player_color == self._eaten_piece.color,
         ]
 
         if any(illegal_conditions):
@@ -53,27 +45,27 @@ class MoveValidator:
             "king": self._validate_king_move,
         }
 
-        validator = rank_to_validator.get(self.moved_piece.rank)
+        validator = rank_to_validator.get(self._moved_piece.rank)
         return validator() if validator else ILLEGAL_MOVE
 
     def _validate_pawn_move(self):
-        row, col = self.start_pos
+        row, col = self._start_pos
         e_row, e_col = self.end_pos
 
         col_diff = abs(col - e_col)
 
         # Forward
         if row - e_row == 1:
-            if col_diff == 0 and not self.eaten_piece:
+            if col_diff == 0 and not self._eaten_piece:
                 return NORMAL_MOVE
 
             # Diagonal
             if col_diff == 1:
-                if self.eaten_piece:
+                if self._eaten_piece:
                     return NORMAL_MOVE
 
                 # En passant
-                if self.board.en_passant_target and self.board.en_passant_target[0] == (
+                if self._board.en_passant_target and self._board.en_passant_target[0] == (
                     e_row,
                     e_col,
                 ):
@@ -82,13 +74,13 @@ class MoveValidator:
         # Double forward
         elif row == 6 and e_row == 4 and col_diff == 0:
             first_step_row = e_row + 1
-            if not self.board.get_piece((first_step_row, e_col)) and not self.eaten_piece:
+            if not self._board.get_piece((first_step_row, e_col)) and not self._eaten_piece:
                 return DOUBLE_STEP
 
         return ILLEGAL_MOVE
 
     def _validate_knight_move(self):
-        row, col = self.start_pos
+        row, col = self._start_pos
         e_row, e_col = self.end_pos
 
         row_diff = abs(e_row - row)
@@ -100,7 +92,7 @@ class MoveValidator:
         return ILLEGAL_MOVE
 
     def _validate_bishop_move(self):
-        row, col = self.start_pos
+        row, col = self._start_pos
         e_row, e_col = self.end_pos
 
         row_diff = abs(e_row - row)
@@ -114,7 +106,7 @@ class MoveValidator:
 
         c_row, c_col = row + row_step, col + col_step
         while (c_row, c_col) != (e_row, e_col):
-            if self.board.get_piece((c_row, c_col)):
+            if self._board.get_piece((c_row, c_col)):
                 return ILLEGAL_MOVE
             c_row += row_step
             c_col += col_step
@@ -122,7 +114,7 @@ class MoveValidator:
         return NORMAL_MOVE
 
     def _validate_rook_move(self):
-        row, col = self.start_pos
+        row, col = self._start_pos
         e_row, e_col = self.end_pos
 
         if row != e_row and col != e_col:
@@ -133,12 +125,12 @@ class MoveValidator:
 
         c_row, c_col = row + row_step, col + col_step
         while (c_row, c_col) != (e_row, e_col):
-            if self.board.get_piece((c_row, c_col)):
+            if self._board.get_piece((c_row, c_col)):
                 return ILLEGAL_MOVE
             c_row += row_step
             c_col += col_step
 
-        self.moved_piece.has_moved = True
+        self._moved_piece.has_moved = True
 
         return NORMAL_MOVE
 
@@ -151,18 +143,18 @@ class MoveValidator:
         return bishop_result
 
     def _validate_king_move(self):
-        row, col = self.start_pos
+        row, col = self._start_pos
         e_row, e_col = self.end_pos
 
         row_diff = abs(e_row - row)
         col_diff = abs(e_col - col)
 
         if row_diff <= 1 and col_diff <= 1:
-            self.moved_piece.has_moved = True
+            self._moved_piece.has_moved = True
             return NORMAL_MOVE
 
         # Castling
-        if row == 7 and row_diff == 0 and col_diff == 2 and not self.moved_piece.has_moved:
+        if row == 7 and row_diff == 0 and col_diff == 2 and not self._moved_piece.has_moved:
 
             if e_col < col:
                 rook_pos = (row, 0)
@@ -171,15 +163,15 @@ class MoveValidator:
                 rook_pos = (row, 7)
                 path_positions = [(row, col + 1), (row, col + 2)]
 
-            rook = self.board.get_piece(rook_pos)
+            rook = self._board.get_piece(rook_pos)
             if not rook or rook.rank != "rook" or rook.has_moved:
                 return ILLEGAL_MOVE
 
             for pos in path_positions:
-                if self.board.get_piece(pos):
+                if self._board.get_piece(pos):
                     return ILLEGAL_MOVE
 
-            self.moved_piece.has_moved = True
+            self._moved_piece.has_moved = True
 
             return CASTLE_LEFT if e_col < col else CASTLE_RIGHT
 

@@ -51,7 +51,7 @@ class MainMenu:
         """Initializes the main menu.
 
         Args:
-            user: Optional User object
+            user: Optional User object.
         """
 
         self._user = user
@@ -107,7 +107,7 @@ class MainMenu:
         """Main event/rendering loop.
 
         Returns:
-            dict for selected game settings or None
+            Dictionary for selected game settings or None.
         """
         while self._running:
             self._handle_events()

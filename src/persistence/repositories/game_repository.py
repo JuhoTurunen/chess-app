@@ -3,15 +3,11 @@ from persistence.models.game import Game
 
 
 class GameRepository:
-    """Repository class for managing game records in the database.
-
-    Attributes:
-        session: SQLAlchemy session instance.
-    """
+    """Repository class for managing game records in the database."""
 
     def __init__(self):
         """Initializes a GameRepository with a new database session."""
-        self.session = SessionLocal()
+        self._session = SessionLocal()
 
     def record_game(self, user_id, result, difficulty):
         """Saves a completed game to the database.
@@ -22,9 +18,9 @@ class GameRepository:
             difficulty: Game difficulty level (1 = easy, 2 = medium, 3 = hard).
         """
         game = Game(user_id=user_id, result=result, difficulty=difficulty)
-        self.session.add(game)
-        self.session.commit()
-        self.session.refresh(game)
+        self._session.add(game)
+        self._session.commit()
+        self._session.refresh(game)
 
     def get_stats(self, user_id):
         """Retrieves win/draw/loss statistics by difficulty for a given user.
@@ -33,7 +29,7 @@ class GameRepository:
             user_id: ID integer of the user.
 
         Returns:
-            Stats summary per difficulty level.
+            Stats summary per difficulty level (1-3).
         """
         stats_by_difficulty = {
             1: {"wins": 0, "draws": 0, "losses": 0},
@@ -41,7 +37,7 @@ class GameRepository:
             3: {"wins": 0, "draws": 0, "losses": 0},
         }
 
-        games = self.session.query(Game).filter_by(user_id=user_id).all()
+        games = self._session.query(Game).filter_by(user_id=user_id).all()
         for game in games:
             if game.result == 1:
                 stats_by_difficulty[game.difficulty]["wins"] += 1

@@ -1,4 +1,4 @@
-from .core import *
+from .core import simulate_move, generate_moves, is_in_check
 
 CHECKMATE = 1
 DRAW = 2
@@ -35,7 +35,7 @@ class GameService:
         """Returns the winner of the game.
 
         Returns:
-            str for winner or None if game is not over
+            String for winner or None if game is not over.
         """
         return self._winner
 
@@ -46,7 +46,7 @@ class GameService:
             move: (start, end) positions as (row, col) tuples.
 
         Returns:
-            Board object or False if the move was illegal
+            Board object or False if the move was illegal.
         """
         if not self._move_piece(move):
             return False
