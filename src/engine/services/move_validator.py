@@ -36,9 +36,8 @@ class MoveValidator:
             int, where 0 is illegal, 1 is normal, and 2-5 are special moves.
         """
         illegal_conditions = [
-            not self.moved_piece,
+            not self.moved_piece or self.board.player_color != self.moved_piece.color,
             not (0 <= self.end_pos[0] <= 7 and 0 <= self.end_pos[1] <= 7),
-            self.board.player_color != self.moved_piece.color,
             self.eaten_piece and self.board.player_color == self.eaten_piece.color,
         ]
 
