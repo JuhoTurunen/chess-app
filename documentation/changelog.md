@@ -18,3 +18,6 @@
 - Added support for multiple users
 - Added game stat tracking using a database
 - Added stat information to main menu GUI
+### Week 7
+- Improved code quality and project structure
+- Improved documentation
