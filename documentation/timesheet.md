@@ -23,4 +23,4 @@
 | 10.5. | 2 | Improved code quality |
 | 11.5. | 3 | Improved code quality |
 |       | 3 | Updated documentation |
-| Total | 47 | | 
+| Total | 49 | | 
