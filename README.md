@@ -3,9 +3,8 @@
 This application works as a chess engine. Using it, you can play chess against a friend on the same computer or against an AI opponent with varying difficulties. The game keeps score of your wins and losses against the AI opponent.
 
 ## Documentation
-- [Requirements specification](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/requirements_specification.md)
-- [Timesheet](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/timesheet.md)
-- [Changelog](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/changelog.md)
+- [**Specification document**](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/specifications.md)
+- [**Weekly reports**](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/weekly_reports/)
 - [Architecture](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/architecture.md)
 - [Testing](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/testing.md)
 - [User manual](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/user_manual.md)
@@ -57,5 +56,3 @@ You can get a pylint command line report with:
 ```bash
 poetry run invoke lint
 ```
-
-[**Ylimääräinen koodikatselmointi**](https://github.com/imsyc75/ot-harjoitustyo/issues/1)
