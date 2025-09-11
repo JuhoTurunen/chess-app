@@ -42,7 +42,7 @@ def _attacked_by_sliders(board, k_row, k_col):
                 row += row_direction
                 col += col_direction
                 continue
-            if _not_own_piece(board, piece) and piece.rank in piece_types:
+            if _not_own_piece(board, piece) and piece[1] in piece_types:
                 return True
             break
     return False
@@ -63,7 +63,7 @@ def _attacked_by_knight(board, k_row, k_col):
     for row, col in knight_positions:
         if _is_in_bounds(row, col):
             piece = board.get_piece((row, col))
-            if _not_own_piece(board, piece) and piece.rank == "knight":
+            if _not_own_piece(board, piece) and piece[1] == "knight":
                 return True
     return False
 
@@ -73,7 +73,7 @@ def _attacked_by_pawn(board, k_row, k_col):
         row, col = k_row + row_direction, k_col + col_direction
         if _is_in_bounds(row, col):
             piece = board.get_piece((row, col))
-            if _not_own_piece(board, piece) and piece.rank == "pawn":
+            if _not_own_piece(board, piece) and piece[1] == "pawn":
                 return True
     return False
 
@@ -90,13 +90,13 @@ def _attacked_by_king(board, k_row, k_col):
                 continue
 
             piece = board.get_piece((row, col))
-            if piece and piece.rank == "king":
+            if piece and piece[1] == "king":
                 return True
     return False
 
 
 def _not_own_piece(board, piece):
-    return piece and piece.color != board.player_color
+    return piece and piece[0] != board.player_color
 
 
 def _is_in_bounds(row, col):

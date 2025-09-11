@@ -28,9 +28,9 @@ class MoveValidator:
             Integer, where 0 is illegal, 1 is normal, and 2-5 are special moves.
         """
         illegal_conditions = [
-            not self._moved_piece or self._board.player_color != self._moved_piece.color,
+            not self._moved_piece or self._board.player_color != self._moved_piece[0],
             not (0 <= self.end_pos[0] <= 7 and 0 <= self.end_pos[1] <= 7),
-            self._eaten_piece and self._board.player_color == self._eaten_piece.color,
+            self._eaten_piece and self._board.player_color == self._eaten_piece[0],
         ]
 
         if any(illegal_conditions):
@@ -45,7 +45,7 @@ class MoveValidator:
             "king": self._validate_king_move,
         }
 
-        validator = rank_to_validator.get(self._moved_piece.rank)
+        validator = rank_to_validator.get(self._moved_piece[1])
         return validator() if validator else ILLEGAL_MOVE
 
     def _validate_pawn_move(self):
@@ -130,8 +130,6 @@ class MoveValidator:
             c_row += row_step
             c_col += col_step
 
-        self._moved_piece.has_moved = True
-
         return NORMAL_MOVE
 
     def _validate_queen_move(self):
@@ -150,11 +148,10 @@ class MoveValidator:
         col_diff = abs(e_col - col)
 
         if row_diff <= 1 and col_diff <= 1:
-            self._moved_piece.has_moved = True
             return NORMAL_MOVE
 
         # Castling
-        if row == 7 and row_diff == 0 and col_diff == 2 and not self._moved_piece.has_moved:
+        if row == 7 and row_diff == 0 and col_diff == 2 and not self._moved_piece[2]:
 
             if e_col < col:
                 rook_pos = (row, 0)
@@ -164,14 +161,12 @@ class MoveValidator:
                 path_positions = [(row, col + 1), (row, col + 2)]
 
             rook = self._board.get_piece(rook_pos)
-            if not rook or rook.rank != "rook" or rook.has_moved:
+            if not rook or rook[1] != "rook" or rook[2]:
                 return ILLEGAL_MOVE
 
             for pos in path_positions:
                 if self._board.get_piece(pos):
                     return ILLEGAL_MOVE
-
-            self._moved_piece.has_moved = True
 
             return CASTLE_LEFT if e_col < col else CASTLE_RIGHT
 

@@ -1,5 +1,8 @@
 import numpy as np
-from .piece import Piece as p
+import copy
+
+
+PIECE_VALUES = {"pawn": 100, "knight": 320, "bishop": 330, "rook": 510, "queen": 975, "king": 0}
 
 
 class Board:
@@ -60,7 +63,9 @@ class Board:
                 if not piece:
                     row_str += "-- "
                 else:
-                    row_str += f"{piece} "
+                    color, rank, _ = piece
+                    abbrev = rank[0].upper() if rank != "knight" else "N"
+                    row_str += f"{color[0]}{abbrev} "
             board_str += row_str + "\n"
         return board_str
 
@@ -75,10 +80,12 @@ class Board:
             for piece in row:
                 if not piece:
                     continue
-                if piece.color == self.player_color:
-                    total += piece.value
+                color, rank, _ = piece
+                value = PIECE_VALUES[rank]
+                if color == self.player_color:
+                    total += value
                 else:
-                    total -= piece.value
+                    total -= value
         return total
 
     @staticmethod
@@ -93,9 +100,18 @@ class Board:
             enemy_pieces = ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
             own_pieces = ["rook", "knight", "bishop", "king", "queen", "bishop", "knight", "rook"]
 
-        board_matrix[0] = [p(enemy_color, piece) for piece in enemy_pieces]
-        board_matrix[1] = [p(enemy_color, "pawn") for _ in range(8)]
-        board_matrix[6] = [p(player_color, "pawn") for _ in range(8)]
-        board_matrix[7] = [p(player_color, piece) for piece in own_pieces]
+        board_matrix[0] = [(enemy_color, piece, False) for piece in enemy_pieces]
+        board_matrix[1] = [(enemy_color, "pawn", False) for _ in range(8)]
+        board_matrix[6] = [(player_color, "pawn", False) for _ in range(8)]
+        board_matrix[7] = [(player_color, piece, False) for piece in own_pieces]
 
         return board_matrix
+
+    def copy(self):
+        new_board = self.__class__.__new__(self.__class__)
+        new_board.board_matrix = self.board_matrix.copy()
+        new_board.player_color = self.player_color
+        new_board.stall_clock = self.stall_clock
+        new_board.en_passant_target = copy.copy(self.en_passant_target)
+        new_board.king_positions = self.king_positions.copy()
+        return new_board

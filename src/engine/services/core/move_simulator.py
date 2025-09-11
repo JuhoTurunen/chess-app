@@ -1,5 +1,3 @@
-import copy
-from engine.entities.piece import Piece
 from .move_validator import MoveValidator
 from .check_detector import is_in_check
 
@@ -14,7 +12,7 @@ def simulate_move(board, move):
     Returns:
         Board object or False.
     """
-    board = copy.deepcopy(board)
+    board = board.copy()
 
     _handle_en_passant_targeting(board)
 
@@ -29,17 +27,20 @@ def simulate_move(board, move):
 
     board.stall_clock += 1
 
-    if moved_piece.rank == "pawn":
+    if moved_piece[1] == "pawn":
         board.stall_clock = 0
         if end_pos[0] == 0:
-            moved_piece = Piece(moved_piece.color, "queen")
+            moved_piece = (moved_piece[0], "queen", True)
     elif eaten_piece:
         board.stall_clock = 0
+
+    if moved_piece[1] in ("king", "rook"):
+        moved_piece = (moved_piece[0], moved_piece[1], True)
 
     board.set_piece(end_pos, moved_piece)
     board.set_piece(start_pos, None)
 
-    if moved_piece.rank == "king":
+    if moved_piece[1] == "king":
         board.king_positions[board.player_color] = end_pos
 
     if is_in_check(board):

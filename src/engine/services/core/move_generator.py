@@ -11,8 +11,8 @@ def generate_moves(board):
     for row in range(8):
         for col in range(8):
             piece = board.get_piece((row, col))
-            if piece is not None and piece.color == board.player_color:
-                match piece.rank:
+            if piece is not None and piece[0] == board.player_color:
+                match piece[1]:
                     case "pawn":
                         moves.extend(_generate_pawn_moves(row, col))
                     case "knight":

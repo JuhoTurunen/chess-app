@@ -1,4 +1,3 @@
-import copy
 from .core import simulate_move, generate_moves, is_in_check
 
 
@@ -27,7 +26,7 @@ class AiEngine:
         Returns:
             None or move tuple (start, end) where each item is (row, col).
         """
-        board = copy.deepcopy(board)
+        board = board.copy()
 
         moves = generate_moves(board)
         if not moves:
