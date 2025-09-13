@@ -30,7 +30,7 @@ class TestPawn(unittest.TestCase):
         self.assertTrue(self.game_service.move_handler(((4, 3), (3, 4))))
 
         self.assertEqual(self.game_service.board.get_piece((3, 4)), None)
-        self.assertEqual(self.game_service.board.get_piece((4, 3)).__repr__(), "wP")
+        self.assertEqual(self.game_service.board.get_piece((4, 3)), ('white', 'pawn', False))
 
     def test_pawn_cant_diagonal_move(self):
         self.assertFalse(self.game_service.move_handler(((6, 2), (5, 3))))
@@ -41,5 +41,5 @@ class TestPawn(unittest.TestCase):
 
         self.assertFalse(self.game_service.move_handler(((4, 4), (3, 4))))
 
-        self.assertEqual(self.game_service.board.get_piece((3, 4)).__repr__(), "bP")
-        self.assertEqual(self.game_service.board.get_piece((4, 4)).__repr__(), "wP")
+        self.assertEqual(self.game_service.board.get_piece((3, 4)), ('black', 'pawn', False))
+        self.assertEqual(self.game_service.board.get_piece((4, 4)), ('white', 'pawn', False))
