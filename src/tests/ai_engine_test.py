@@ -49,7 +49,7 @@ class TestAiEngine(unittest.TestCase):
 
         self.game_service.board.king_positions = {"white": (7, 7), "black": (1, 7)}
 
-        ai_engine = AiEngine(7)
+        ai_engine = AiEngine(6)
 
         # White should move bishop to check black
         ai_move = ai_engine.get_best_move(self.game_service.board)
