@@ -34,6 +34,8 @@ class AiEngine:
 
         best_move = None
         best_score = -float("inf")
+        alpha = -float("inf")
+        beta = float("inf")
 
         for move in moves:
 
@@ -43,11 +45,12 @@ class AiEngine:
 
             new_board.flip_board()
 
-            score = -self._negamax(new_board, self._depth - 1, -float("inf"), float("inf"))
+            score = -self._negamax(new_board, self._depth - 1, -beta, -alpha)
 
             if score > best_score:
                 best_score = score
                 best_move = move
+                alpha = max(alpha, score)
 
         return best_move
 
