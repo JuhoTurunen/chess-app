@@ -1,5 +1,5 @@
 def generate_moves(board):
-    """Generates all pseudo-valid moves for current player.
+    """Generates all valid moves for current player.
 
     Args:
         board: Board object.
@@ -158,6 +158,27 @@ def _generate_king(row, col, board):
                     king_moves.append(((row, col), (new_row, new_col)))
     if row == 7 and col == 4:
         # Castling
-        king_moves.append(((row, col), (row, col + 2)))
-        king_moves.append(((row, col), (row, col - 2)))
+        king_piece = board.get_piece((row, col))
+        if king_piece and not king_piece[2]:
+            rook_right = board.get_piece((7, 7))
+            if (
+                rook_right
+                and rook_right[1] == "rook"
+                and not rook_right[2]
+                and not board.get_piece((7, 5))
+                and not board.get_piece((7, 6))
+            ):
+                king_moves.append(((row, col), (row, col + 2)))
+
+            rook_left = board.get_piece((7, 0))
+            if (
+                rook_left
+                and rook_left[1] == "rook"
+                and not rook_left[2]
+                and not board.get_piece((7, 1))
+                and not board.get_piece((7, 2))
+                and not board.get_piece((7, 3))
+            ):
+                king_moves.append(((row, col), (row, col - 2)))
+
     return king_moves
