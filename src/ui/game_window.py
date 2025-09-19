@@ -77,7 +77,7 @@ class GameWindow:
                     self._clicks.append(board_pos)
 
                     if len(self._clicks) == 2:
-                        new_board = self._game_service.move_handler(self._clicks)
+                        new_board = self._game_service.move_handler(tuple(self._clicks))
                         if new_board:
                             self._board = new_board
                         self._clicks = []

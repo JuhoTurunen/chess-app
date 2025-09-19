@@ -70,6 +70,10 @@ class GameService:
         return self.board
 
     def _move_piece(self, move):
+        valid_moves = generate_moves(self.board)
+        if move not in valid_moves:
+            return False
+
         board = simulate_move(self.board, move)
 
         if not board:
@@ -104,7 +108,7 @@ class GameService:
         moves = generate_moves(self.board)
 
         for move in moves:
-            if not simulate_move(self.board, move):
+            if not moves or not simulate_move(self.board, move):
                 continue
             return False
 
