@@ -1,4 +1,4 @@
-from .core import simulate_move, generate_moves, is_in_check
+from .core import simulate_move, generate_moves, is_in_check, evaluate_board
 
 
 class AiEngine:
@@ -61,7 +61,7 @@ class AiEngine:
             Integer for best achievable material balance from given board state.
         """
         if depth == 0:
-            return board.material_balance()
+            return evaluate_board(board)
 
         moves = generate_moves(board)
 
