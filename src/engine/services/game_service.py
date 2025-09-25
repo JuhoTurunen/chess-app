@@ -108,9 +108,8 @@ class GameService:
         moves = generate_moves(self.board)
 
         for move in moves:
-            if not moves or not simulate_move(self.board, move):
-                continue
-            return False
+            if simulate_move(self.board, move):
+                return False
 
         if is_in_check(self.board):
             return CHECKMATE

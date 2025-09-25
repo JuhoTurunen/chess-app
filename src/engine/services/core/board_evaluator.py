@@ -1,7 +1,3 @@
-# TODO Fix bug where both white and black get their position
-#      evaluated as positive, resulting in minimax breaking.
-
-
 PIECE_VALUES = {
     "pawn": 100,
     "knight": 320,
