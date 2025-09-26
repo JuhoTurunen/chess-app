@@ -27,7 +27,7 @@ def simulate_move(board, move):
     if moved_piece[1] == "pawn":
         board.stall_clock = 0
         if end_pos[0] == 0:
-            moved_piece = (moved_piece[0], "queen", True)
+            moved_piece = (moved_piece[0], "queen", False)
     elif eaten_piece:
         board.stall_clock = 0
 

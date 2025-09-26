@@ -33,12 +33,10 @@ class AiEngine:
             return None
 
         best_move = None
-        best_score = -float("inf")
-        alpha = -float("inf")
-        beta = float("inf")
+        alpha = -1000000
+        beta = 1000000
 
         for move in moves:
-
             new_board = simulate_move(board, move)
             if not new_board:
                 continue
@@ -47,10 +45,12 @@ class AiEngine:
 
             score = -self._negamax(new_board, self._depth - 1, -beta, -alpha)
 
-            if score > best_score:
-                best_score = score
+            if score > alpha:
+                alpha = score
                 best_move = move
-                alpha = max(alpha, score)
+
+            if alpha >= beta:
+                break
 
         return best_move
 
@@ -60,19 +60,23 @@ class AiEngine:
         Returns:
             Integer for best achievable material balance from given board state.
         """
+        moves = generate_moves(board)
+
+        valid_moves = []
+        for move in moves:
+            new_board = simulate_move(board, move)
+            if new_board:
+                valid_moves.append((move, new_board))
+
+        if not valid_moves:
+            if is_in_check(board):
+                return -100000 + depth
+            return 0
+
         if depth == 0:
             return evaluate_board(board)
 
-        moves = generate_moves(board)
-
-        no_moves = True
-        for move in moves:
-            new_board = simulate_move(board, move)
-            if not new_board:
-                continue
-
-            no_moves = False
-
+        for move, new_board in valid_moves:
             new_board.flip_board()
 
             score = -self._negamax(new_board, depth - 1, -beta, -alpha)
@@ -80,8 +84,5 @@ class AiEngine:
             alpha = max(alpha, score)
             if alpha >= beta:
                 break
-
-        if no_moves:
-            return -float("inf") if is_in_check(board) else 0
 
         return alpha

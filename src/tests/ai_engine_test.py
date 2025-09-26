@@ -47,16 +47,14 @@ class TestAiEngine(unittest.TestCase):
         self.game_service.board.set_piece((3, 5), ("white", "pawn", False))
         self.game_service.board.set_piece((6, 1), ("white", "pawn", False))
 
-        self.game_service.board.king_positions = {"white": (7, 7), "black": (1, 7)}
+        self.game_service.board.king_positions = {"white": (7, 7), "black": (6, 0)}
 
-        ai_engine = AiEngine(6)
+        ai_engine = AiEngine(3)
 
         # White should move bishop to check black
         ai_move = ai_engine.get_best_move(self.game_service.board)
         self.assertTrue(self.game_service.move_handler(ai_move))
-        self.assertEqual(
-            self.game_service.board.get_piece((5, 1)), ("white", "bishop", False)
-        )
+        self.assertEqual(self.game_service.board.get_piece((5, 1)), ("white", "bishop", False))
 
         # Black moves king away from check
         self.assertTrue(self.game_service.move_handler(((6, 0), (7, 1))))
@@ -64,6 +62,4 @@ class TestAiEngine(unittest.TestCase):
         # White should checkmate through promotion
         ai_move2 = ai_engine.get_best_move(self.game_service.board)
         self.assertTrue(self.game_service.move_handler(ai_move2))
-        self.assertEqual(
-            self.game_service.board.get_piece((7, 4)), ("white", "queen", False)
-        )
+        self.assertEqual(self.game_service.board.get_piece((0, 3)), ("white", "queen", False))
