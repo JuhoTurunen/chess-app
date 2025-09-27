@@ -87,50 +87,33 @@ def evaluate_board(board):
     Returns:
         Integer value of own pieces minus enemy pieces, including positional bonuses.
     """
-    total_material = 0
-    total = 0
+    total = total_material = 0
     kings = []
 
     for row_index, row in enumerate(board.board_matrix):
         for col_index, piece in enumerate(row):
             if not piece:
                 continue
-            color, rank, _ = piece
 
+            color, rank, _ = piece
             piece_value = PIECE_VALUES[rank]
             total_material += piece_value
 
-            eval_row = row_index
-            eval_col = col_index
-
-            if color != board.player_color:
-                eval_row = 7 - eval_row
-
-            if color == "black":
-                eval_col = 7 - eval_col
+            eval_row = 7 - row_index if color != board.player_color else row_index
+            eval_col = 7 - col_index if color == "black" else col_index
 
             if rank == "king":
                 kings.append((eval_row, eval_col, color))
                 continue
 
-            positional_bonus = POSITION_VALUES[rank][eval_row][eval_col]
-            total_piece_value = piece_value + positional_bonus
+            total_piece_value = piece_value + POSITION_VALUES[rank][eval_row][eval_col]
 
-            if color == board.player_color:
-                total += total_piece_value
-            else:
-                total -= total_piece_value
+            total += total_piece_value if color == board.player_color else -total_piece_value
 
-    is_endgame = total_material < 2200
+    king_table = "king_endgame" if total_material < 2200 else "king"
 
-    # Evaluate kings with different tables based on gamestage
     for eval_row, eval_col, color in kings:
-        king_table = "king_endgame" if is_endgame else "king"
         positional_bonus = POSITION_VALUES[king_table][eval_row][eval_col]
-
-        if color == board.player_color:
-            total += positional_bonus
-        else:
-            total -= positional_bonus
+        total += positional_bonus if color == board.player_color else -positional_bonus
 
     return total

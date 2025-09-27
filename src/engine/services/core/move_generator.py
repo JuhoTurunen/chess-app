@@ -40,31 +40,37 @@ def _generate_pawn(row, col, board):
     quiet_moves = []
 
     new_row = row - 1
-    if 0 <= new_row:
-        target_piece = board.get_piece((new_row, col))
-        if target_piece is None:
-            # Normal forward
-            quiet_moves.append(((row, col), (new_row, col)))
-            if row == 6:
-                double_move_piece = board.get_piece((row - 2, col))
-                if double_move_piece is None:
-                    # Double forward
-                    quiet_moves.append(((row, col), (row - 2, col)))
+    if new_row < 0:
+        return capturing_moves, quiet_moves
 
-        for col_offset in [-1, 1]:
-            new_col = col + col_offset
-            if 0 <= new_col < 8:
-                target_piece = board.get_piece((new_row, new_col))
-                if target_piece is not None and target_piece[0] != board.player_color:
-                    # Capture
-                    capturing_moves.append(((row, col), (new_row, new_col)))
-                elif (
-                    target_piece is None
-                    and board.en_passant_target
-                    and board.en_passant_target[0] == (new_row, new_col)
-                ):
-                    # En passant
-                    capturing_moves.append(((row, col), (new_row, new_col)))
+    # Peaceful moves
+    target_piece = board.get_piece((new_row, col))
+    if target_piece is None:
+        # Normal forward
+        quiet_moves.append(((row, col), (new_row, col)))
+
+        if row == 6:
+            if board.get_piece((row - 2, col)) is None:
+                # Double forward
+                quiet_moves.append(((row, col), (row - 2, col)))
+
+    # Attacking moves
+    for col_offset in [-1, 1]:
+        new_col = col + col_offset
+        if not 0 <= new_col < 8:
+            continue
+
+        target_piece = board.get_piece((new_row, new_col))
+        if target_piece is not None and target_piece[0] != board.player_color:
+            # Diagonal capture
+            capturing_moves.append(((row, col), (new_row, new_col)))
+        elif (
+            target_piece is None
+            and board.en_passant_target
+            and board.en_passant_target[0] == (new_row, new_col)
+        ):
+            # En passant
+            capturing_moves.append(((row, col), (new_row, new_col)))
 
     return capturing_moves, quiet_moves
 
@@ -81,7 +87,7 @@ def _generate_knight(row, col, board):
         if 0 <= new_row < 8 and 0 <= new_col < 8:
             target_piece = board.get_piece((new_row, new_col))
             if target_piece is None:
-                # Normal move
+                # Normal
                 quiet_moves.append(((row, col), (new_row, new_col)))
             elif target_piece[0] != board.player_color:
                 # Capture
@@ -100,19 +106,19 @@ def _generate_bishop(row, col, board):
         for i in range(1, 8):
             new_row = row + row_direction * i
             new_col = col + col_direction * i
-            if 0 <= new_row < 8 and 0 <= new_col < 8:
-                target_piece = board.get_piece((new_row, new_col))
-                if target_piece is None:
-                    # Normal
-                    quiet_moves.append(((row, col), (new_row, new_col)))
-                elif target_piece[0] != board.player_color:
-                    # Capture
-                    capturing_moves.append(((row, col), (new_row, new_col)))
-                    break
-                else:
-                    # Blocked
-                    break
+            if not (0 <= new_row < 8 and 0 <= new_col < 8):
+                break
+
+            target_piece = board.get_piece((new_row, new_col))
+            if target_piece is None:
+                # Normal
+                quiet_moves.append(((row, col), (new_row, new_col)))
+            elif target_piece[0] != board.player_color:
+                # Capture
+                capturing_moves.append(((row, col), (new_row, new_col)))
+                break
             else:
+                # Blocked
                 break
 
     return capturing_moves, quiet_moves
@@ -128,19 +134,19 @@ def _generate_rook(row, col, board):
         for i in range(1, 8):
             new_row = row + row_direction * i
             new_col = col + col_direction * i
-            if 0 <= new_row < 8 and 0 <= new_col < 8:
-                target_piece = board.get_piece((new_row, new_col))
-                if target_piece is None:
-                    # Normal
-                    quiet_moves.append(((row, col), (new_row, new_col)))
-                elif target_piece[0] != board.player_color:
-                    # Capture
-                    capturing_moves.append(((row, col), (new_row, new_col)))
-                    break
-                else:
-                    # Blocked
-                    break
+            if not (0 <= new_row < 8 and 0 <= new_col < 8):
+                break
+
+            target_piece = board.get_piece((new_row, new_col))
+            if target_piece is None:
+                # Normal
+                quiet_moves.append(((row, col), (new_row, new_col)))
+            elif target_piece[0] != board.player_color:
+                # Capture
+                capturing_moves.append(((row, col), (new_row, new_col)))
+                break
             else:
+                # Blocked
                 break
 
     return capturing_moves, quiet_moves
@@ -164,14 +170,16 @@ def _generate_king(row, col, board):
                 continue
             new_row = row + row_direction
             new_col = col + col_direction
-            if 0 <= new_row < 8 and 0 <= new_col < 8:
-                target_piece = board.get_piece((new_row, new_col))
-                if target_piece is None:
-                    # Normal
-                    quiet_moves.append(((row, col), (new_row, new_col)))
-                elif target_piece[0] != board.player_color:
-                    # Capture
-                    capturing_moves.append(((row, col), (new_row, new_col)))
+            if not (0 <= new_row < 8 and 0 <= new_col < 8):
+                continue
+
+            target_piece = board.get_piece((new_row, new_col))
+            if target_piece is None:
+                # Normal
+                quiet_moves.append(((row, col), (new_row, new_col)))
+            elif target_piece[0] != board.player_color:
+                # Capture
+                capturing_moves.append(((row, col), (new_row, new_col)))
 
     if row == 7 and col == 4:
         # Castling

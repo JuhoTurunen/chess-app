@@ -22,14 +22,12 @@ def simulate_move(board, move):
     moved_piece = board.get_piece(start_pos)
     eaten_piece = board.get_piece(end_pos)
 
-    board.stall_clock += 1
-
-    if moved_piece[1] == "pawn":
+    if moved_piece[1] == "pawn" or eaten_piece:
         board.stall_clock = 0
-        if end_pos[0] == 0:
+        if moved_piece[1] == "pawn" and end_pos[0] == 0:
             moved_piece = (moved_piece[0], "queen", False)
-    elif eaten_piece:
-        board.stall_clock = 0
+    else:
+        board.stall_clock += 1
 
     if moved_piece[1] in ("king", "rook"):
         moved_piece = (moved_piece[0], moved_piece[1], True)
@@ -40,10 +38,7 @@ def simulate_move(board, move):
     if moved_piece[1] == "king":
         board.king_positions[board.player_color] = end_pos
 
-    if is_in_check(board):
-        return False
-
-    return board
+    return False if is_in_check(board) else board
 
 
 def _process_special_moves(board, move):
@@ -59,12 +54,7 @@ def _process_special_moves(board, move):
     end_row, end_col = end_pos
 
     # Pawn double step
-    if (
-        piece_type == "pawn"
-        and start_row == 6
-        and end_row == 4
-        and start_col == end_col
-    ):
+    if piece_type == "pawn" and start_row == 6 and end_row == 4 and start_col == end_col:
         board.en_passant_target = [(7 - (end_row + 1), 7 - end_col), False]
 
     # En passant
