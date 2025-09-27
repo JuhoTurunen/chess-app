@@ -32,25 +32,41 @@ class AiEngine:
         if not moves:
             return None
 
-        best_move = None
-        alpha = -1000000
-        beta = 1000000
-
+        valid_moves = []
         for move in moves:
-            new_board = simulate_move(board, move)
-            if not new_board:
-                continue
+            if simulate_move(board, move):
+                valid_moves.append(move)
 
-            new_board.flip_board()
+        if not valid_moves:
+            return None
 
-            score = -self._negamax(new_board, self._depth - 1, -beta, -alpha)
+        best_move = valid_moves[0]
 
-            if score > alpha:
-                alpha = score
-                best_move = move
+        for current_depth in range(1, self._depth + 1):
+            iteration_best_move = None
+            alpha = -1000000
+            beta = 1000000
+            move_scores = []
 
-            if alpha >= beta:
-                break
+            for move in valid_moves:
+                new_board = simulate_move(board, move)
+                new_board.flip_board()
+
+                score = -self._negamax(new_board, current_depth - 1, -beta, -alpha)
+                move_scores.append((score, move))
+
+                if score > alpha:
+                    alpha = score
+                    iteration_best_move = move
+
+                if alpha >= beta:
+                    break
+
+            if iteration_best_move:
+                best_move = iteration_best_move
+
+            move_scores.sort(key=lambda x: x[0], reverse=True)
+            valid_moves = [move for _, move in move_scores]
 
         return best_move
 
