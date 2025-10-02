@@ -116,4 +116,4 @@ def evaluate_board(board):
         positional_bonus = POSITION_VALUES[king_table][eval_row][eval_col]
         total += positional_bonus if color == board.player_color else -positional_bonus
 
-    return total
+    return total if board.stall_clock < 50 else 0
