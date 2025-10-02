@@ -114,6 +114,22 @@ class AiEngine:
         Returns:
             Integer for best achievable material balance from given board state.
         """
+        original_alpha = alpha
+        position_hash = self._get_position_hash(board)
+        position_entry = self._transposition_table.get(position_hash)
+
+        # Check transposition table
+        if position_entry and position_entry["depth"] >= depth:
+            if position_entry["value_type"] == "exact":
+                return position_entry["score"]
+            elif position_entry["value_type"] == "lower_bound":
+                alpha = max(alpha, position_entry["score"])
+            elif position_entry["value_type"] == "upper_bound":
+                beta = min(beta, position_entry["score"])
+
+            if alpha >= beta:
+                return position_entry["score"]
+
         moves = generate_moves(board)
 
         # Only let through moves where own king is not checked
@@ -129,8 +145,7 @@ class AiEngine:
             return evaluate_board(board)
 
         # If position was evaluated previously, move the best known move to front for better pruning
-        position_hash = self._get_position_hash(board)
-        if best_known_move := self._transposition_table.get(position_hash):
+        if position_entry and (best_known_move := position_entry["best_move"]):
             for i, (move, _) in enumerate(valid_moves):
                 if move == best_known_move:
                     valid_moves.insert(0, valid_moves.pop(i))
@@ -150,7 +165,17 @@ class AiEngine:
             if alpha >= beta:
                 break
 
-        if best_move:
-            self._transposition_table[position_hash] = best_move
+        value_type = "exact"
+        if alpha <= original_alpha:
+            value_type = "upper_bound"
+        elif alpha >= beta:
+            value_type = "lower_bound"
+
+        self._transposition_table[position_hash] = {
+            "score": alpha,
+            "depth": depth,
+            "value_type": value_type,
+            "best_move": best_move,
+        }
 
         return alpha
