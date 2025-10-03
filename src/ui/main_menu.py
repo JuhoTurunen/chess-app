@@ -151,7 +151,7 @@ class MainMenu:
                     self._selected_config = {
                         "mode": "ai",
                         "player_color": self._selected_color,
-                        "ai_depth": self._selected_difficulty,
+                        "difficulty": self._selected_difficulty,
                         "user": self._user,
                     }
                     self._running = False
@@ -160,7 +160,7 @@ class MainMenu:
                     self._selected_config = {
                         "mode": "pvp",
                         "player_color": "white",
-                        "ai_depth": None,
+                        "difficulty": None,
                         "user": self._user,
                     }
                     self._running = False

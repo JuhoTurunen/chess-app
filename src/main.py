@@ -26,7 +26,18 @@ def main():
             board = Board("white")
         else:
             board = Board(config["player_color"])
-            ai_engine = AiEngine(config["ai_depth"])
+
+            # Difficulty profiles
+            match config["difficulty"]:
+                case 1:
+                    ai_engine = AiEngine(depth=2)
+                case 2:
+                    ai_engine = AiEngine(depth=3)
+                case 3:
+                    ai_engine = AiEngine(depth=3, time_limit=2500)
+                case _:
+                    ai_engine = AiEngine(depth=2)
+
         user = config["user"]
         game_service = GameService(board, ai_engine, user, GameRepository())
         game_window = GameWindow(game_service)
