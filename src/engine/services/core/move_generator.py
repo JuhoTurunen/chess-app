@@ -1,14 +1,15 @@
-def generate_moves(board):
+def generate_moves(board, only_active=False):
     """Generates all valid moves for current player.
 
     Args:
         board: Board object.
+        only_active: If True, only return active moves
 
     Returns:
         List of move tuples (start, end) where each item is (row, col).
-        Capturing moves are returned first.
+        Active moves are returned first.
     """
-    capturing_moves = []
+    active_moves = []
     quiet_moves = []
 
     for row in range(8):
@@ -17,37 +18,42 @@ def generate_moves(board):
             if piece is not None and piece[0] == board.player_color:
                 match piece[1]:
                     case "knight":
-                        piece_capture, piece_quiet = _generate_knight(row, col, board)
+                        piece_active, piece_quiet = _generate_knight(row, col, board)
                     case "bishop":
-                        piece_capture, piece_quiet = _generate_bishop(row, col, board)
+                        piece_active, piece_quiet = _generate_bishop(row, col, board)
                     case "queen":
-                        piece_capture, piece_quiet = _generate_queen(row, col, board)
+                        piece_active, piece_quiet = _generate_queen(row, col, board)
                     case "rook":
-                        piece_capture, piece_quiet = _generate_rook(row, col, board)
+                        piece_active, piece_quiet = _generate_rook(row, col, board)
                     case "pawn":
-                        piece_capture, piece_quiet = _generate_pawn(row, col, board)
+                        piece_active, piece_quiet = _generate_pawn(row, col, board)
                     case "king":
-                        piece_capture, piece_quiet = _generate_king(row, col, board)
+                        piece_active, piece_quiet = _generate_king(row, col, board)
 
-                capturing_moves.extend(piece_capture)
-                quiet_moves.extend(piece_quiet)
+                active_moves.extend(piece_active)
+                if not only_active:
+                    quiet_moves.extend(piece_quiet)
 
-    return capturing_moves + quiet_moves
+    return active_moves if only_active else active_moves + quiet_moves
 
 
 def _generate_pawn(row, col, board):
-    capturing_moves = []
+    active_moves = []
     quiet_moves = []
 
     new_row = row - 1
     if new_row < 0:
-        return capturing_moves, quiet_moves
+        return active_moves, quiet_moves
 
     # Peaceful moves
     target_piece = board.get_piece((new_row, col))
     if target_piece is None:
-        # Normal forward
-        quiet_moves.append(((row, col), (new_row, col)))
+        if new_row == 0:
+            # Promotion
+            active_moves.append(((row, col), (new_row, col)))
+        else:
+            # Normal forward
+            quiet_moves.append(((row, col), (new_row, col)))
 
         if row == 6:
             if board.get_piece((row - 2, col)) is None:
@@ -63,20 +69,20 @@ def _generate_pawn(row, col, board):
         target_piece = board.get_piece((new_row, new_col))
         if target_piece is not None and target_piece[0] != board.player_color:
             # Diagonal capture
-            capturing_moves.append(((row, col), (new_row, new_col)))
+            active_moves.append(((row, col), (new_row, new_col)))
         elif (
             target_piece is None
             and board.en_passant_target
             and board.en_passant_target[0] == (new_row, new_col)
         ):
             # En passant
-            capturing_moves.append(((row, col), (new_row, new_col)))
+            active_moves.append(((row, col), (new_row, new_col)))
 
-    return capturing_moves, quiet_moves
+    return active_moves, quiet_moves
 
 
 def _generate_knight(row, col, board):
-    capturing_moves = []
+    active_moves = []
     quiet_moves = []
 
     offsets = [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]
@@ -91,13 +97,13 @@ def _generate_knight(row, col, board):
                 quiet_moves.append(((row, col), (new_row, new_col)))
             elif target_piece[0] != board.player_color:
                 # Capture
-                capturing_moves.append(((row, col), (new_row, new_col)))
+                active_moves.append(((row, col), (new_row, new_col)))
 
-    return capturing_moves, quiet_moves
+    return active_moves, quiet_moves
 
 
 def _generate_bishop(row, col, board):
-    capturing_moves = []
+    active_moves = []
     quiet_moves = []
 
     directions = [(-1, -1), (-1, 1), (1, 1), (1, -1)]
@@ -115,17 +121,17 @@ def _generate_bishop(row, col, board):
                 quiet_moves.append(((row, col), (new_row, new_col)))
             elif target_piece[0] != board.player_color:
                 # Capture
-                capturing_moves.append(((row, col), (new_row, new_col)))
+                active_moves.append(((row, col), (new_row, new_col)))
                 break
             else:
                 # Blocked
                 break
 
-    return capturing_moves, quiet_moves
+    return active_moves, quiet_moves
 
 
 def _generate_rook(row, col, board):
-    capturing_moves = []
+    active_moves = []
     quiet_moves = []
 
     directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
@@ -143,25 +149,25 @@ def _generate_rook(row, col, board):
                 quiet_moves.append(((row, col), (new_row, new_col)))
             elif target_piece[0] != board.player_color:
                 # Capture
-                capturing_moves.append(((row, col), (new_row, new_col)))
+                active_moves.append(((row, col), (new_row, new_col)))
                 break
             else:
                 # Blocked
                 break
 
-    return capturing_moves, quiet_moves
+    return active_moves, quiet_moves
 
 
 def _generate_queen(row, col, board):
     # Queen = bishop + rook
-    bishop_captures, bishop_quiet = _generate_bishop(row, col, board)
-    rook_captures, rook_quiet = _generate_rook(row, col, board)
+    bishop_active, bishop_quiet = _generate_bishop(row, col, board)
+    rook_active, rook_quiet = _generate_rook(row, col, board)
 
-    return bishop_captures + rook_captures, bishop_quiet + rook_quiet
+    return bishop_active + rook_active, bishop_quiet + rook_quiet
 
 
 def _generate_king(row, col, board):
-    capturing_moves = []
+    active_moves = []
     quiet_moves = []
 
     for row_direction in [-1, 0, 1]:
@@ -179,7 +185,7 @@ def _generate_king(row, col, board):
                 quiet_moves.append(((row, col), (new_row, new_col)))
             elif target_piece[0] != board.player_color:
                 # Capture
-                capturing_moves.append(((row, col), (new_row, new_col)))
+                active_moves.append(((row, col), (new_row, new_col)))
 
     if row == 7 and col == 4:
         # Castling
@@ -206,4 +212,4 @@ def _generate_king(row, col, board):
             ):
                 quiet_moves.append(((row, col), (row, col - 2)))
 
-    return capturing_moves, quiet_moves
+    return active_moves, quiet_moves

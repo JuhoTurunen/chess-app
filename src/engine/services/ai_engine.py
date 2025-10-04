@@ -1,6 +1,7 @@
 import hashlib
 import time
 from .core import simulate_move, generate_moves, is_in_check, evaluate_board
+from .core.board_evaluator import PIECE_VALUES
 
 
 class AIEngine:
@@ -108,7 +109,7 @@ class AIEngine:
             beta: Integer of the best score for minimizing player.
 
         Returns:
-            Integer for best achievable material balance from given board state.
+            Integer for best achievable evaluation from given board state.
         """
         if self._should_stop_search():
             return 0
@@ -141,7 +142,7 @@ class AIEngine:
             return -self.CHECKMATE_SCORE + depth if is_in_check(board) else 0
 
         if depth == 0:
-            return evaluate_board(board)
+            return self._quiescence_search(board, alpha, beta)
 
         # If position was evaluated previously, move the best known move to front for better pruning
         if position_entry and (best_known_move := position_entry["best_move"]):
@@ -186,6 +187,67 @@ class AIEngine:
                 "value_type": value_type,
                 "best_move": best_move,
             }
+
+        return alpha
+
+    def _quiescence_search(self, board, alpha, beta, depth=6):
+        """Quiescence search to avoid horizon effect.
+
+        Args:
+            board: Board object.
+            alpha: Integer of the best score for maximizing player.
+            beta: Integer of the best score for minimizing player.
+            depth: Maximum depth for quiescence search.
+
+        Returns:
+            Integer for best achievable evaluation from given board state.
+        """
+        if self._should_stop_search() or depth <= 0:
+            return evaluate_board(board)
+
+        current_eval = evaluate_board(board)
+        if current_eval >= beta:
+            return current_eval
+
+        if current_eval > alpha:
+            alpha = current_eval
+
+        if in_check := is_in_check(board):
+            moves = generate_moves(board)
+        else:
+            moves = generate_moves(board, only_active=True)
+
+        valid_moves = [
+            (move, new_board) for move in moves if (new_board := simulate_move(board, move))
+        ]
+
+        if not valid_moves:
+            return -self.CHECKMATE_SCORE if in_check else current_eval
+
+        for move, new_board in valid_moves:
+            if self._should_stop_search():
+                break
+
+            if not in_check:
+                # Delta pruning
+                captured_piece = board.get_piece(move[1])
+                captured_value = (
+                    PIECE_VALUES[captured_piece[1]] if captured_piece else PIECE_VALUES["queen"]
+                )
+
+                if current_eval + captured_value + 150 < alpha:
+                    # Even with the capture and positional bonus, can't reach alpha
+                    continue
+
+            new_board.flip_board()
+
+            score = -self._quiescence_search(new_board, -beta, -alpha, depth - 1)
+
+            if score >= beta:
+                return beta
+
+            if score > alpha:
+                alpha = score
 
         return alpha
 
