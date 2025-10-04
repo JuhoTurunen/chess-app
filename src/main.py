@@ -32,7 +32,7 @@ def main():
                 case 1:
                     ai_engine = AiEngine(depth=2)
                 case 2:
-                    ai_engine = AiEngine(depth=3)
+                    ai_engine = AiEngine(depth=3, time_limit=1000)
                 case 3:
                     ai_engine = AiEngine(depth=3, time_limit=2500)
                 case _:
