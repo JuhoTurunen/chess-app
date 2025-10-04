@@ -33,14 +33,12 @@ class TestAiEngine(unittest.TestCase):
         #    -- wP bQ -- -- -- -- --
         #    -- -- -- -- -- -- -- wK
 
-        # Black pieces
         self.game_service.board.set_piece((1, 7), ("black", "king", True))
         self.game_service.board.set_piece((5, 2), ("black", "queen", False))
         self.game_service.board.set_piece((6, 2), ("black", "queen", False))
         self.game_service.board.set_piece((1, 6), ("black", "pawn", False))
         self.game_service.board.set_piece((2, 7), ("black", "pawn", False))
 
-        # White pieces
         self.game_service.board.set_piece((7, 7), ("white", "king", True))
         self.game_service.board.set_piece((3, 7), ("white", "bishop", False))
         self.game_service.board.set_piece((1, 3), ("white", "pawn", False))
@@ -63,3 +61,33 @@ class TestAiEngine(unittest.TestCase):
         ai_move2 = ai_engine.get_best_move(self.game_service.board)
         self.assertTrue(self.game_service.move_handler(ai_move2))
         self.assertEqual(self.game_service.board.get_piece((0, 3)), ("white", "queen", False))
+
+    def test_quiescence_search_prevents_bad_trade(self):
+        for row in range(8):
+            for col in range(8):
+                self.game_service.board.set_piece((row, col), None)
+
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- wQ -- -- -- --
+        #    -- -- -- -- -- -- -- wK
+        #    -- -- -- bR -- -- -- --
+        #    -- -- bP -- -- -- -- --
+        #    -- -- -- -- -- bK -- --
+
+        self.game_service.board.set_piece((4, 7), ("white", "king", True))
+        self.game_service.board.set_piece((3, 3), ("white", "queen", False))
+
+        self.game_service.board.set_piece((7, 5), ("black", "king", True))
+        self.game_service.board.set_piece((5, 3), ("black", "rook", True))
+        self.game_service.board.set_piece((6, 2), ("black", "pawn", False))
+
+        self.game_service.board.king_positions = {"white": (4, 4), "black": (7, 5)}
+
+        # AI with very shallow depth should avoid the rook capture
+        # because quiescence search will reveal it leads to losing the queen
+        ai_engine = AIEngine(1)
+        ai_move = ai_engine.get_best_move(self.game_service.board)
+
+        self.assertNotEqual(ai_move, ((3, 3), (5, 3)))
