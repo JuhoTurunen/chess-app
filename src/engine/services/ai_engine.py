@@ -54,6 +54,7 @@ class AiEngine:
         best_move = valid_moves[0]
         self._current_depth = 1
 
+        # Iterative deepening
         while True:
             if self._current_depth > self.depth:
                 if self.time_limit is None:
@@ -96,51 +97,6 @@ class AiEngine:
             self._current_depth += 1
 
         return best_move
-
-    def _get_position_hash(self, board):
-        """Generate a hash for the current board position.
-
-        Returns:
-            String hash representing the board position.
-        """
-
-        # Turn board position into a string
-        def piece_to_string(piece):
-            if piece is None:
-                return "0"
-            color, rank, has_moved = piece
-            color_char = color[0]
-            rank_char = rank[0] if rank != "knight" else "n"
-            if rank in ("king", "rook"):
-                return f"{color_char}{rank_char}{int(has_moved)}"
-            return f"{color_char}{rank_char}"
-
-        position_string = "".join(
-            piece_to_string(piece) for row in board.board_matrix for piece in row
-        )
-
-        # Include player color and en passant information
-        position_string += board.player_color[0]
-        if board.en_passant_target:
-            ep_pos, ep_flag = board.en_passant_target
-            position_string += f"{ep_pos[0]}{ep_pos[1]}{int(ep_flag)}"
-
-        return hashlib.md5(position_string.encode()).hexdigest()
-
-    def _should_stop_search(self):
-        """Check if search should stop due to time limit.
-
-        Returns:
-            Boolean indicating if search should stop.
-        """
-        if self.time_limit is None:
-            return False
-
-        if self._current_depth <= self.depth:
-            return False
-
-        elapsed_time = (time.time() - self._start_time) * 1000
-        return elapsed_time >= self.time_limit
 
     def _negamax(self, board, depth, alpha, beta):
         """Negamax with alpha-beta pruning and a transposition table.
@@ -232,3 +188,48 @@ class AiEngine:
             }
 
         return alpha
+
+    def _get_position_hash(self, board):
+        """Generate a hash for the current board position.
+
+        Returns:
+            String hash representing the board position.
+        """
+
+        # Turn board position into a string
+        def piece_to_string(piece):
+            if piece is None:
+                return "0"
+            color, rank, has_moved = piece
+            color_char = color[0]
+            rank_char = rank[0] if rank != "knight" else "n"
+            if rank in ("king", "rook"):
+                return f"{color_char}{rank_char}{int(has_moved)}"
+            return f"{color_char}{rank_char}"
+
+        position_string = "".join(
+            piece_to_string(piece) for row in board.board_matrix for piece in row
+        )
+
+        # Include player color and en passant information
+        position_string += board.player_color[0]
+        if board.en_passant_target:
+            ep_pos, ep_flag = board.en_passant_target
+            position_string += f"{ep_pos[0]}{ep_pos[1]}{int(ep_flag)}"
+
+        return hashlib.md5(position_string.encode()).hexdigest()
+
+    def _should_stop_search(self):
+        """Check if search should stop due to time limit.
+
+        Returns:
+            Boolean indicating if search should stop.
+        """
+        if self.time_limit is None:
+            return False
+
+        if self._current_depth <= self.depth:
+            return False
+
+        elapsed_time = (time.time() - self._start_time) * 1000
+        return elapsed_time >= self.time_limit
