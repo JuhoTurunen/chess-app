@@ -3,7 +3,7 @@ import time
 from .core import simulate_move, generate_moves, is_in_check, evaluate_board
 
 
-class AiEngine:
+class AIEngine:
     """AI that selects best move using Negamax.
 
     Attributes:

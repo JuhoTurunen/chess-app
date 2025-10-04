@@ -2,7 +2,7 @@
 
 import unittest
 from engine.entities.board import Board
-from engine.services.ai_engine import AiEngine
+from engine.services.ai_engine import AIEngine
 from engine.services.game_service import GameService
 
 
@@ -12,7 +12,7 @@ class TestAiEngine(unittest.TestCase):
         self.game_service = GameService(self.board)
 
     def test_get_best_move_returns_valid_move(self):
-        ai_engine = AiEngine(2)
+        ai_engine = AIEngine(2)
         ai_move = ai_engine.get_best_move(self.board)
         self.assertTrue(self.game_service.move_handler(ai_move))
 
@@ -49,7 +49,7 @@ class TestAiEngine(unittest.TestCase):
 
         self.game_service.board.king_positions = {"white": (7, 7), "black": (6, 0)}
 
-        ai_engine = AiEngine(3)
+        ai_engine = AIEngine(3)
 
         # White should move bishop to check black
         ai_move = ai_engine.get_best_move(self.game_service.board)
