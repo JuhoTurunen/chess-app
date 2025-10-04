@@ -1,7 +1,9 @@
 # Architecture
 
 ## High-level description
+
 The architecture is mainly divided into three main components:
+
 - UI
 - Engine
   - Entities
@@ -10,15 +12,16 @@ The architecture is mainly divided into three main components:
   - Models
   - Repositories
 
+The main.py file serves as the entry point for the program as well as a coordinator of the three different components. It initiates MainMenu and passes the game setting info it receives from there to the GameService. The GameService itself is passed to the UI level's GameWindow. From there on, the window sends board moves to the GameService, which returns a board to the GameWindow for rendering.
 
-The main.py file serves as the entry point for the program as well as a coordinator of the three different components. It initiates MainMenu and passes the game setting info it receives from there to the GameService. The GameService itself is passed to the UI level's GameWindow. From there on, the window sends board moves to the GameService, which returns a board to the GameWindow for rendering. 
+Within the Engine, the GameService is central. It manages the game state, which is represented by the Board Entity. When processing moves, GameService utilizes other Services within the Engine, such as the AIEngine (if playing against an AI) and the core chess logic functions (for validating moves, simulating them, detecting checks, and generating possible moves). These core functions operate directly on the Board entity.
 
-Within the Engine, the GameService is central. It manages the game state, which is represented by Entities like the Board and Piece objects. When processing moves, GameService utilizes other Services within the Engine, such as the AIEngine (if playing against an AI) and the core chess logic functions (for validating moves, simulating them, detecting checks, and generating possible moves). These core functions operate directly on the Board entity.
+The Persistence layer handles saving and loading data. The MainMenu uses Repositories (UserRepository and GameRepository) to fetch user information and display statistics, as well as to create new users. Similarly, after a game concludes, the GameService can use a GameRepository to record the game's outcome.
 
-The Persistence layer handles saving and loading data. The MainMenu uses Repositories (UserRepository and GameRepository) to fetch user information and display statistics, or to create new users. Similarly, after a game concludes, the GameService can use a GameRepository to record the game's outcome. 
+### Program architecture
 
-### Program arcitechture
 Here is a highly abstracted class diagram for the entire chess engine:
+
 ```mermaid
 classDiagram
     %% UI Layer
@@ -58,12 +61,6 @@ classDiagram
       +set_piece(position, piece)
       +flip_board()
     }
-    class Piece {
-      <<entity>>
-      +color
-      +rank
-      +value
-    }
 
     %% Persistence Layer - Repositories
     class UserRepository {
@@ -96,13 +93,14 @@ classDiagram
 
     AiEngine --> Board : analyzes
 
-    Board "1" *-- "0..*" Piece : contains
-
     UserRepository ..> User : creates/retrieves
 
 ```
+
 ## Turn sequence diagram
-Here is a high-level sequence diagram for the actions taken after a player selects a move in the game window (and when the player's color is white). The player's color and whether they play against AI or another player is dictated by the config received from the main menu. The "AI Move" branch only triggers if the player is playing against AI.
+
+Here is a high-level sequence diagram for the actions taken after a player selects a move in the game window (and when the player's color is white). The player's color and whether they play against AI or another player are dictated by the config received from the main menu. The "AI Move" branch only triggers if the player is playing against AI.
+
 ```mermaid
 sequenceDiagram
     participant GW as GameWindow
@@ -113,13 +111,13 @@ sequenceDiagram
     GW->>GW: render()
     Note over GW: User selects a move
     GW->>+GS: move_handler([first_click, second_click])
-    
+
     GS->>+S: simulate_move(board, player_move)
     S-->>-GS: new_board
     GS->>GS: new_board.flip_board()
     GS->>GS: Update self.board with new_board
     GS->>GS: is_game_over() returns false
-    
+
     opt AI Move
         GS->>+A: get_best_move(board)
         A-->>-GS: ai_move
@@ -134,3 +132,46 @@ sequenceDiagram
     GW->>GW: render()
     Note over GW: Waiting for the next move
 ```
+
+## Game AI
+
+### Flow
+
+The AI engine follows this high-level decision-making process:
+
+1. **Move Generation**: Generate all legal moves for the current position using the move generator
+2. **Move Filtering**: Filter out moves that would leave the AI's own king in check
+3. **Iterative Deepening**: Start with depth 1 and incrementally increase search depth until either the minimum depth is reached or the time limit is exceeded. The minimum depth is prioritized and will always be reached, even if time runs out
+4. **Move Evaluation**: For each valid move, simulate the position and evaluate using negamax with alpha-beta pruning
+5. **Move Ordering**: Sort moves by their evaluation scores to improve pruning efficiency in the following iterations
+6. **Best Move Selection**: Return the move with the highest evaluation score from the deepest completed search
+
+### Algorithms
+
+The AI employs the following algorithms:
+
+- **Negamax with Alpha-Beta Pruning**: A minimax variant that treats both players symmetrically. Uses alpha-beta pruning to eliminate branches that cannot improve the current best score
+- **Iterative Deepening**: Progressively searches at increasing depths, allowing the AI to improve its analysis until a time limit is reached. Also improves alpha-beta pruning since earlier best moves are more likely to still be good moves at deeper depths
+- **Transposition Tables**: Caches previously evaluated positions and best moves to avoid redundant calculations and improve alpha-beta pruning
+
+The AI is also optimized using move ordering, prioritizing capturing moves over quiet moves, and using previously found best moves from the transposition tables to improve alpha-beta pruning effectiveness.
+
+### Heuristics
+
+The board evaluation combines both material and positional values for assessment:
+
+**Material Values**: pawn=100, knight=320, bishop=330, rook=510, queen=975, king=0 (irrelevant)
+
+**Positional Tables**: Each piece type has a heatmap for favored and penalized positions:
+
+- **Pawns**: Higher values for central squares and advancing, lower values for needlessly reducing king cover
+- **Knights**: Higher values for central squares, lower values for edges and corners
+- **Bishops**: Higher values for central diagonals and active positions
+- **Rooks**: Higher values for controlling open files and seventh rank
+- **Queens**: Slightly higher values for central positions with emphasis on mobility
+- **Kings**: Values vary by game phase - defensive in early-/middlegame, active in endgame
+
+**Special Conditions**:
+
+- **Endgame Detection**: Switches to endgame king tables when total material drops below 2200 centipawns
+- **Stalemate Avoidance**: Returns neutral evaluation when the 50-move rule approaches to avoid drawn positions
