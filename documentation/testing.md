@@ -8,7 +8,7 @@ The main application logic is mostly tested by a single TestPawn class, which at
 In addition to general game logic testing, there are separate tests for verifying that only legal moves can be made during check, as well as testing some of the game's end states. The AI engine also has tests to ensure it can find and force a mate-in-two from a given position. 
 
 ### Test coverage
-The test coverage for the application logic currently stands at 82%.
+The test coverage for the application logic currently stands at 84%.
 
 ![](./images/coverage_report.jpg)
 
