@@ -1,3 +1,6 @@
+from .check_detector import is_in_check, is_square_attacked
+
+
 def generate_moves(board, only_active=False):
     """Generates all valid moves for current player.
 
@@ -190,7 +193,7 @@ def _generate_king(row, col, board):
     if row == 7 and col == 4:
         # Castling
         king_piece = board.get_piece((row, col))
-        if king_piece and not king_piece[2]:
+        if king_piece and not king_piece[2] and not is_in_check(board):
             rook_right = board.get_piece((7, 7))
             if (
                 rook_right
@@ -198,6 +201,7 @@ def _generate_king(row, col, board):
                 and not rook_right[2]
                 and not board.get_piece((7, 5))
                 and not board.get_piece((7, 6))
+                and not is_square_attacked(board, (7, 5))
             ):
                 quiet_moves.append(((row, col), (row, col + 2)))
 
@@ -209,6 +213,7 @@ def _generate_king(row, col, board):
                 and not board.get_piece((7, 1))
                 and not board.get_piece((7, 2))
                 and not board.get_piece((7, 3))
+                and not is_square_attacked(board, (7, 3))
             ):
                 quiet_moves.append(((row, col), (row, col - 2)))
 

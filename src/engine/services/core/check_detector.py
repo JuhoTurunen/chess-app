@@ -8,14 +8,28 @@ def is_in_check(board):
         Boolean for whether own king is in check.
     """
     k_row, k_col = board.king_positions[board.player_color]
+    return is_square_attacked(board, (k_row, k_col))
 
-    if _attacked_by_sliders(board, k_row, k_col):
+
+def is_square_attacked(board, position):
+    """Checks if a square is under attack.
+
+    Args:
+        board: Board object.
+        position: (row, col) tuple of the square to check.
+
+    Returns:
+        Boolean for whether the square is under attack.
+    """
+    row, col = position
+
+    if _attacked_by_sliders(board, row, col):
         return True
-    if _attacked_by_knight(board, k_row, k_col):
+    if _attacked_by_knight(board, row, col):
         return True
-    if _attacked_by_pawn(board, k_row, k_col):
+    if _attacked_by_pawn(board, row, col):
         return True
-    if _attacked_by_king(board, k_row, k_col):
+    if _attacked_by_king(board, row, col):
         return True
 
     return False
@@ -90,7 +104,7 @@ def _attacked_by_king(board, k_row, k_col):
                 continue
 
             piece = board.get_piece((row, col))
-            if piece and piece[1] == "king":
+            if _not_own_piece(board, piece) and piece[1] == "king":
                 return True
     return False
 
