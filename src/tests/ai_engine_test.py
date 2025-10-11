@@ -21,8 +21,8 @@ class TestAiEngine(unittest.TestCase):
             for col in range(8):
                 self.game_service.board.set_piece((row, col), None)
 
-        # Position with checkmate by white in two moves:
-        # If mate in two is not taken, white will lose in one move.
+        # Position with checkmate by white in two moves
+        # If mate in two is not taken, white will lose in one move
         #
         #    -- -- -- -- -- -- -- --
         #    -- -- -- wP -- -- bP bK
@@ -47,7 +47,7 @@ class TestAiEngine(unittest.TestCase):
 
         self.game_service.board.king_positions = {"white": (7, 7), "black": (6, 0)}
 
-        ai_engine = AIEngine(3)
+        ai_engine = AIEngine(2)
 
         # White should move bishop to check black
         ai_move = ai_engine.get_best_move(self.game_service.board)
@@ -91,3 +91,38 @@ class TestAiEngine(unittest.TestCase):
         ai_move = ai_engine.get_best_move(self.game_service.board)
 
         self.assertNotEqual(ai_move, ((3, 3), (5, 3)))
+
+    def test_ai_executes_castle(self):
+        for row in range(8):
+            for col in range(8):
+                self.game_service.board.set_piece((row, col), None)
+
+        #    -- -- -- -- -- -- bK --
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- -- -- -- -- --
+        #    -- -- -- wP wP wP -- --
+        #    bQ -- -- wP wP wP wP --
+        #    -- -- -- -- wK -- -- wR
+
+        self.game_service.board.set_piece((7, 4), ("white", "king", False))
+        self.game_service.board.set_piece((7, 7), ("white", "rook", False))
+        self.game_service.board.set_piece((6, 6), ("white", "pawn", False))
+        self.game_service.board.set_piece((6, 5), ("white", "pawn", False))
+        self.game_service.board.set_piece((6, 4), ("white", "pawn", False))
+        self.game_service.board.set_piece((6, 3), ("white", "pawn", False))
+        self.game_service.board.set_piece((5, 5), ("white", "pawn", False))
+        self.game_service.board.set_piece((5, 4), ("white", "pawn", False))
+        self.game_service.board.set_piece((5, 3), ("white", "pawn", False))
+
+        self.game_service.board.set_piece((0, 6), ("black", "king", True))
+        self.game_service.board.set_piece((6, 0), ("black", "queen", False))
+
+        self.game_service.board.king_positions = {"white": (7, 4), "black": (0, 6)}
+
+        # AI should castle kingside to prevent checkmate in one from black queen
+        ai_engine = AIEngine(2)
+        ai_move = ai_engine.get_best_move(self.game_service.board)
+
+        self.assertEqual(ai_move, ((7, 4), (7, 6)))
