@@ -153,6 +153,7 @@ class AIEngine:
 
         best_move = None
         search_interrupted = False
+        first_move = True
 
         for move, new_board in valid_moves:
             if self._should_stop_search():
@@ -161,7 +162,19 @@ class AIEngine:
 
             new_board.flip_board()
 
-            score = -self._negamax(new_board, depth - 1, -beta, -alpha)
+            if first_move:
+                score = -self._negamax(new_board, depth - 1, -beta, -alpha)
+                first_move = False
+            else:
+                # Null window search
+                score = -self._negamax(new_board, depth - 1, -alpha - 1, -alpha)
+
+                if self._should_stop_search():
+                    search_interrupted = True
+                    break
+
+                if score > alpha and score < beta:
+                    score = -self._negamax(new_board, depth - 1, -beta, -alpha)
 
             if self._should_stop_search():
                 search_interrupted = True
