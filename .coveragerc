@@ -4,5 +4,4 @@ omit =
     **/__init__.py,
     src/main.py,src/tests/**,
     src/ui/**, 
-    src/persistence/models/**, 
-    src/persistence/session.py 
+    src/persistence/**
