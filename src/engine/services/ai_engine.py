@@ -8,22 +8,36 @@ class AIEngine:
     """AI that selects best move using Negamax.
 
     Attributes:
-        depth: Positive integer for minimum search depth.
-        time_limit: Optional time limit in milliseconds.
+        difficulty: Integer 1-3 representing game difficulty.
     """
 
     CHECKMATE_SCORE = 100000
     INFINITY = 1000000
 
-    def __init__(self, depth, time_limit=None):
-        """Initializes AI with search depth and optional time limit.
+    def __init__(self, difficulty):
+        """Initializes AI with difficulty level.
 
         Args:
-            depth: Positive integer for minimum search depth.
-            time_limit: Optional time limit in milliseconds.
+            difficulty: Integer 1-3 (1=easy, 2=medium, 3=hard).
         """
-        self.depth = depth
-        self.time_limit = time_limit
+        self.difficulty = difficulty
+
+        # Map difficulty to depth and time limit
+        match difficulty:
+            case 1:
+                self.depth = 1
+                self.time_limit = None
+            case 2:
+                self.depth = 2
+                self.time_limit = 1000
+            case 3:
+                self.depth = 3
+                self.time_limit = 2500
+            case _:
+                self.difficulty = 1
+                self.depth = 1
+                self.time_limit = None
+
         self._transposition_table = {}
         self._start_time = None
         self._current_depth = 0
@@ -75,7 +89,9 @@ class AIEngine:
                 new_board = simulate_move(board, move)
                 new_board.flip_board()
 
-                score = -self._negamax(new_board, self._current_depth - 1, -beta, -alpha)
+                score = -self._negamax(
+                    new_board, self._current_depth - 1, -beta, -alpha
+                )
 
                 if self._should_stop_search():
                     return best_move
@@ -134,7 +150,9 @@ class AIEngine:
 
         # Only let through moves where own king is not checked
         valid_moves = [
-            (move, new_board) for move in moves if (new_board := simulate_move(board, move))
+            (move, new_board)
+            for move in moves
+            if (new_board := simulate_move(board, move))
         ]
 
         # If no legal moves exist, player is checkmated or in stalemate
@@ -231,7 +249,9 @@ class AIEngine:
             moves = generate_moves(board, only_active=True)
 
         valid_moves = [
-            (move, new_board) for move in moves if (new_board := simulate_move(board, move))
+            (move, new_board)
+            for move in moves
+            if (new_board := simulate_move(board, move))
         ]
 
         if not valid_moves:
@@ -245,7 +265,9 @@ class AIEngine:
                 # Delta pruning
                 captured_piece = board.get_piece(move[1])
                 captured_value = (
-                    PIECE_VALUES[captured_piece[1]] if captured_piece else PIECE_VALUES["queen"]
+                    PIECE_VALUES[captured_piece[1]]
+                    if captured_piece
+                    else PIECE_VALUES["queen"]
                 )
 
                 if current_eval + captured_value + 150 < alpha:

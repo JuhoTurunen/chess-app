@@ -12,7 +12,7 @@ class TestAiEngine(unittest.TestCase):
         self.game_service = GameService(self.board)
 
     def test_get_best_move_returns_valid_move(self):
-        ai_engine = AIEngine(2)
+        ai_engine = AIEngine(difficulty=2)
         ai_move = ai_engine.get_best_move(self.board)
         self.assertTrue(self.game_service.move_handler(ai_move))
 
@@ -47,12 +47,14 @@ class TestAiEngine(unittest.TestCase):
 
         self.game_service.board.king_positions = {"white": (7, 7), "black": (6, 0)}
 
-        ai_engine = AIEngine(2)
+        ai_engine = AIEngine(difficulty=2)
 
         # White should move bishop to check black
         ai_move = ai_engine.get_best_move(self.game_service.board)
         self.assertTrue(self.game_service.move_handler(ai_move))
-        self.assertEqual(self.game_service.board.get_piece((5, 1)), ("white", "bishop", False))
+        self.assertEqual(
+            self.game_service.board.get_piece((5, 1)), ("white", "bishop", False)
+        )
 
         # Black moves king away from check
         self.assertTrue(self.game_service.move_handler(((6, 0), (7, 1))))
@@ -60,7 +62,9 @@ class TestAiEngine(unittest.TestCase):
         # White should checkmate through promotion
         ai_move2 = ai_engine.get_best_move(self.game_service.board)
         self.assertTrue(self.game_service.move_handler(ai_move2))
-        self.assertEqual(self.game_service.board.get_piece((0, 3)), ("white", "queen", False))
+        self.assertEqual(
+            self.game_service.board.get_piece((0, 3)), ("white", "queen", False)
+        )
 
     def test_quiescence_search_prevents_bad_trade(self):
         for row in range(8):
@@ -87,7 +91,7 @@ class TestAiEngine(unittest.TestCase):
 
         # AI with very shallow depth should avoid the rook capture
         # because quiescence search will reveal it leads to losing the queen
-        ai_engine = AIEngine(1)
+        ai_engine = AIEngine(difficulty=1)
         ai_move = ai_engine.get_best_move(self.game_service.board)
 
         self.assertNotEqual(ai_move, ((3, 3), (5, 3)))
@@ -122,7 +126,7 @@ class TestAiEngine(unittest.TestCase):
         self.game_service.board.king_positions = {"white": (7, 4), "black": (0, 6)}
 
         # AI should castle kingside to prevent checkmate in one from black queen
-        ai_engine = AIEngine(2)
+        ai_engine = AIEngine(difficulty=2)
         ai_move = ai_engine.get_best_move(self.game_service.board)
 
         self.assertEqual(ai_move, ((7, 4), (7, 6)))
