@@ -154,7 +154,7 @@ The AI employs the following algorithms:
 - **Iterative Deepening**: Progressively searches at increasing depths, allowing the AI to improve its analysis until a time limit is reached. Also improves alpha-beta pruning since earlier best moves are more likely to still be good moves at deeper depths
 - **Transposition Tables**: Caches previously evaluated positions and best moves to avoid redundant calculations and improve alpha-beta pruning. Stores the evaluation score, search depth, value type (exact, upper bound, lower bound), and best move for each position
 - **Quiescence Search**: Extends search beyond the depth limit to evaluate only capturing moves and checks, preventing the horizon effect where the AI cant reach the final outcome of capture chains. Uses delta pruning to skip captures that cannot improve the position enough to matter
-- **Null Window Search**: After evaluating the first move at each node, following moves are searched with a minimal window (alpha, alpha+1) to quickly verify they're not better. If a move exceeds this window, it's re-searched with the full window
+- **Null Window Search**: After evaluating the first move at each node, the following moves are searched with a minimal window (alpha, alpha+1) to quickly verify they're not better. If a move exceeds this window, it's re-searched with the full window
 
 The AI is also optimized using move ordering, prioritizing capturing moves over quiet moves, and using previously found best moves from the transposition tables to improve alpha-beta pruning effectiveness.
 
@@ -175,9 +175,15 @@ The board evaluation combines both material and positional values for assessment
 - **Bishops**: Higher values for central diagonals and active positions
 - **Rooks**: Higher values for controlling open files and seventh rank
 - **Queens**: Slightly higher values for central positions with emphasis on mobility
-- **Kings**: Values vary by game phase - defensive in early-/middlegame, active in endgame
+- **Kings**: Values vary by game phase: defensive in early-/middlegame, active in endgame
 
 **Special Conditions**:
 
 - **Endgame Detection**: Switches to endgame king tables when total material drops below 2200 centipawns
 - **Stalemate Avoidance**: Returns neutral evaluation when the 50-move rule approaches to avoid drawn positions
+
+## Sources
+I did not have a clear singular source, but I did find the [Chess Programming WIKI](https://www.chessprogramming.org/Main_Page) quite useful when first delving into a new algorithm or optimization.
+
+### AI use
+I found AI useful for bug hunting and building understanding on how certain algorithms were supposed to work. It also provided high-quality pseudo code when prompted, but the actual code was written by me. AI was also useful for getting back into the project, as when I started, there had been multiple months since I last developed this Chess engine. AI was also used for improving grammar in the documentation.
