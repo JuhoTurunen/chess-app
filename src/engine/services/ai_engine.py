@@ -22,7 +22,7 @@ class AIEngine:
         """
         self.difficulty = difficulty
 
-        # Map difficulty to depth and time limit
+        # Difficulty profiles
         match difficulty:
             case 1:
                 self.depth = 1
@@ -89,9 +89,7 @@ class AIEngine:
                 new_board = simulate_move(board, move)
                 new_board.flip_board()
 
-                score = -self._negamax(
-                    new_board, self._current_depth - 1, -beta, -alpha
-                )
+                score = -self._negamax(new_board, self._current_depth - 1, -beta, -alpha)
 
                 if self._should_stop_search():
                     return best_move
@@ -150,9 +148,7 @@ class AIEngine:
 
         # Only let through moves where own king is not checked
         valid_moves = [
-            (move, new_board)
-            for move in moves
-            if (new_board := simulate_move(board, move))
+            (move, new_board) for move in moves if (new_board := simulate_move(board, move))
         ]
 
         # If no legal moves exist, player is checkmated or in stalemate
@@ -240,8 +236,7 @@ class AIEngine:
         if current_eval >= beta:
             return current_eval
 
-        if current_eval > alpha:
-            alpha = current_eval
+        alpha = max(alpha, current_eval)
 
         if in_check := is_in_check(board):
             moves = generate_moves(board)
@@ -249,9 +244,7 @@ class AIEngine:
             moves = generate_moves(board, only_active=True)
 
         valid_moves = [
-            (move, new_board)
-            for move in moves
-            if (new_board := simulate_move(board, move))
+            (move, new_board) for move in moves if (new_board := simulate_move(board, move))
         ]
 
         if not valid_moves:
@@ -265,9 +258,7 @@ class AIEngine:
                 # Delta pruning
                 captured_piece = board.get_piece(move[1])
                 captured_value = (
-                    PIECE_VALUES[captured_piece[1]]
-                    if captured_piece
-                    else PIECE_VALUES["queen"]
+                    PIECE_VALUES[captured_piece[1]] if captured_piece else PIECE_VALUES["queen"]
                 )
 
                 if current_eval + captured_value + 150 < alpha:
@@ -281,8 +272,7 @@ class AIEngine:
             if score >= beta:
                 return beta
 
-            if score > alpha:
-                alpha = score
+            alpha = max(alpha, score)
 
         return alpha
 
