@@ -1,4 +1,4 @@
-# Architecture
+# Implementation
 
 ## High-level description
 
@@ -152,7 +152,9 @@ The AI employs the following algorithms:
 
 - **Negamax with Alpha-Beta Pruning**: A minimax variant that treats both players symmetrically. Uses alpha-beta pruning to eliminate branches that cannot improve the current best score
 - **Iterative Deepening**: Progressively searches at increasing depths, allowing the AI to improve its analysis until a time limit is reached. Also improves alpha-beta pruning since earlier best moves are more likely to still be good moves at deeper depths
-- **Transposition Tables**: Caches previously evaluated positions and best moves to avoid redundant calculations and improve alpha-beta pruning
+- **Transposition Tables**: Caches previously evaluated positions and best moves to avoid redundant calculations and improve alpha-beta pruning. Stores the evaluation score, search depth, value type (exact, upper bound, lower bound), and best move for each position
+- **Quiescence Search**: Extends search beyond the depth limit to evaluate only capturing moves and checks, preventing the horizon effect where the AI cant reach the final outcome of capture chains. Uses delta pruning to skip captures that cannot improve the position enough to matter
+- **Null Window Search**: After evaluating the first move at each node, following moves are searched with a minimal window (alpha, alpha+1) to quickly verify they're not better. If a move exceeds this window, it's re-searched with the full window
 
 The AI is also optimized using move ordering, prioritizing capturing moves over quiet moves, and using previously found best moves from the transposition tables to improve alpha-beta pruning effectiveness.
 

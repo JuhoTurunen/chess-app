@@ -3,10 +3,10 @@
 This application works as a chess engine. Using it, you can play chess against a friend on the same computer or against an AI opponent with varying difficulties. The game keeps score of your wins and losses against the AI opponent.
 
 ## Documentation
-- [Specification document](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/specifications.md)
+- [Specifications](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/specifications.md)
 - [Weekly reports](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/weekly_reports/)
 - [Testing](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/testing.md)
-- [Architecture](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/architecture.md)
+- [Implementation](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/implementation.md)
 - [User manual](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/user_manual.md)
 
 
