@@ -158,6 +158,10 @@ The AI employs the following algorithms:
 
 The AI is also optimized using move ordering, prioritizing capturing moves over quiet moves, and using previously found best moves from the transposition tables to improve alpha-beta pruning effectiveness.
 
+### Time Complexity
+
+The base minimax algorithm has a time complexity of **O(b^d)**, where `b` is the average branching factor (number of legal moves per position) and `d` is the search depth. In chess, the average branching factor is approximately 35, making an unoptimized search highly expensive. However, the implemented optimizations dramatically improve this complexity. Alpha-beta pruning is the most significant optimization, reducing the complexity to approximately **O(b^(d/2))** in the best case when moves are perfectly ordered, and **O(b^(3d/4))** in typical scenarios with good move ordering. This allows the AI to search roughly twice as deep in the same amount of time. Transposition tables further cut a substantial portion of the search tree by caching previously evaluated positions.
+
 ### Heuristics
 
 The board evaluation combines both material and positional values for assessment:
