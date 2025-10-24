@@ -21,4 +21,4 @@ Each feature in the [requirements specification](https://github.com/JuhoTurunen/
 document has been verified to work on both operating systems.
 
 ## Testing limitations
-Currently, the database repositories and initialization are not covered by automated testing. This is due to the small complexity of said database and the logic related to it. Though the database has been thoroughly manually tested. 
+Currently, the database repositories and initialization are not covered by automated testing. This is due to the small complexity of said database and the logic related to it. Still, the database logic has been thoroughly manually tested. 
