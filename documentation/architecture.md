@@ -1,6 +1,6 @@
-# Implementation
+# Architecture
 
-## High-level description
+## Overview
 
 The architecture is mainly divided into three main components:
 
@@ -97,7 +97,7 @@ classDiagram
 
 ```
 
-## Turn sequence diagram
+## Move Processing Flow
 
 Here is a high-level sequence diagram for the actions taken after a player selects a move in the game window (and when the player's color is white). The player's color and whether they play against AI or another player are dictated by the config received from the main menu. The "AI Move" branch only triggers if the player is playing against AI.
 
@@ -153,7 +153,7 @@ The AI employs the following algorithms:
 - **Negamax with Alpha-Beta Pruning**: A minimax variant that treats both players symmetrically. Uses alpha-beta pruning to eliminate branches that cannot improve the current best score
 - **Iterative Deepening**: Progressively searches at increasing depths, allowing the AI to improve its analysis until a time limit is reached. Also improves alpha-beta pruning since earlier best moves are more likely to still be good moves at deeper depths
 - **Transposition Tables**: Caches previously evaluated positions and best moves to avoid redundant calculations and improve alpha-beta pruning. Stores the evaluation score, search depth, value type (exact, upper bound, lower bound), and best move for each position
-- **Quiescence Search**: Extends search beyond the depth limit to evaluate only capturing moves and checks, preventing the horizon effect where the AI cant reach the final outcome of capture chains. Uses delta pruning to skip captures that cannot improve the position enough to matter
+- **Quiescence Search**: Extends search beyond the depth limit to evaluate capturing moves and check evasions, preventing the horizon effect where the AI can't see the final outcome of capture chains. Uses delta pruning to skip captures that cannot improve the position enough to matter
 - **Null Window Search**: After evaluating the first move at each node, the following moves are searched with a minimal window (alpha, alpha+1) to quickly verify they're not better. If a move exceeds this window, it's re-searched with the full window
 
 The AI is also optimized using move ordering, prioritizing capturing moves over quiet moves, and using previously found best moves from the transposition tables to improve alpha-beta pruning effectiveness.
@@ -180,10 +180,4 @@ The board evaluation combines both material and positional values for assessment
 **Special Conditions**:
 
 - **Endgame Detection**: Switches to endgame king tables when total material drops below 2200 centipawns
-- **Stalemate Avoidance**: Returns neutral evaluation when the 50-move rule approaches to avoid drawn positions
-
-## Sources
-I did not have a clear singular source, but I did find the [Chess Programming WIKI](https://www.chessprogramming.org/Main_Page) quite useful when first delving into a new algorithm or optimization.
-
-### AI use
-I found AI useful for bug hunting and building understanding on how certain algorithms were supposed to work. It also provided high-quality pseudo code when prompted, but the actual code was written by me. AI was also useful for getting back into the project, as when I started, there had been multiple months since I last developed this Chess engine. AI was also used for improving grammar in the documentation.
+- **50-Move Rule Handling**: Returns neutral evaluation when the 50-move rule approaches to avoid drawn positions

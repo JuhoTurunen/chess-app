@@ -1,57 +1,69 @@
 # Chess App
 
-This application works as a chess engine. Using it, you can play chess against a friend on the same computer or against an AI opponent with varying difficulties. The game keeps score of your wins and losses against the AI opponent.
+A chess application featuring a custom-built AI engine. Play against a friend locally or challenge the AI at three difficulty levels. User accounts track your win/loss record across sessions.
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Pygame](https://img.shields.io/badge/GUI-Pygame-green)
+![Coverage](https://img.shields.io/badge/Coverage-90%25-brightgreen)
+
+## Features
+
+**Chess Engine**
+- Complete chess rules implementation including castling, en passant, pawn promotion, and 50-move draw detection
+- Board state represented as NumPy matrix with perspective flipping between turns
+
+**AI Opponent**
+- Negamax search with alpha-beta pruning
+- Iterative deepening with time-limited search
+- Transposition tables for position caching
+- Quiescence search to prevent horizon effect
+- Principal Variation Search (null window optimization)
+- Piece-square tables with endgame-aware king positioning
+
+**Application**
+- Pygame GUI with piece highlighting and move validation
+- Player vs Player and Player vs AI modes
+- SQLite database for user accounts and game statistics
 
 ## Documentation
-- [Specifications](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/specifications.md)
-- [Weekly reports](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/weekly_reports/)
-- [Testing](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/testing.md)
-- [Implementation](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/implementation.md)
-- [User manual](https://github.com/JuhoTurunen/ot-harjoitustyo/blob/main/documentation/user_manual.md)
 
+- [Architecture](./documentation/architecture.md) — System design, class diagrams, and AI algorithm details
+- [Testing](./documentation/testing.md) — Test coverage and methodology
+- [User Manual](./documentation/user_manual.md) — How to use the application
 
 ## Installation
 
-1. Clone the project with:
+**Prerequisites:** Python 3.10+, [Poetry](https://python-poetry.org/)
 
+1. Clone the repository:
 ```bash
 git clone https://github.com/JuhoTurunen/chess-app.git
+cd chess-app
 ```
 
-2. After entering the project directory, install dependencies with:
-   
+2. Install dependencies:
 ```bash
 poetry install
 ```
 
-3. Start the app with:
-
+3. Run the application:
 ```bash
 poetry run invoke start
 ```
 
-## Commands
+## Development
 
-You can start the chess app with:
-
-```bash
-poetry run invoke start
-```
-
-You can run tests with:
-
+Run tests:
 ```bash
 poetry run invoke test
 ```
 
-You can generate a test coverage report (found in htmlcov/index.html) with:
-
+Generate coverage report (output in `htmlcov/index.html`):
 ```bash
 poetry run invoke coverage-report
 ```
 
-You can get a pylint command line report with:
-
+Run linter:
 ```bash
 poetry run invoke lint
 ```
