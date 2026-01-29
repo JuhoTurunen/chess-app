@@ -12,19 +12,19 @@ def start(ctx):
 
 @task
 def test(ctx):
-    ctx.run("pytest src/", pty=PTY_OPTION)
+    ctx.run(f"{executable} -m pytest src/", pty=PTY_OPTION)
 
 
 @task
 def coverage(ctx):
-    ctx.run("coverage run --branch -m pytest src/", pty=PTY_OPTION)
+    ctx.run(f"{executable} -m coverage run --branch -m pytest src/", pty=PTY_OPTION)
 
 
 @task(coverage)
 def coverage_report(ctx):
-    ctx.run("coverage html", pty=PTY_OPTION)
+    ctx.run(f"{executable} -m coverage html", pty=PTY_OPTION)
 
 
 @task
 def lint(ctx):
-    ctx.run("pylint src/", pty=PTY_OPTION)
+    ctx.run(f"{executable} -m pylint src/", pty=PTY_OPTION)
